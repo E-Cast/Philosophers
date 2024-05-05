@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:48 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/05 12:01:51 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/05 13:18:56 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,28 +51,14 @@
 // 	return (EXIT_SUCCESS);
 // }
 
-// //storing the number of philo might not be needed
-// int	set_table(int argc, char **argv, t_table *table)
-// {
-// 	int	tmp;
-
-// 	tmp = ph_atoui(argv[1]);
-// 	if (init_philosophers(table->philos, tmp) == EXIT_FAILURE)
-// 		return (EXIT_FAILURE);
-// 	table->time_to_die = ph_atoui(argv[2]);
-// 	table->time_to_eat = ph_atoui(argv[3]);
-// 	table->time_to_sleep = ph_atoui(argv[4]);
-// 	table->time_eaten_to_end = -1;
-// 	if (argc == 6)
-// 		table->time_eaten_to_end = ph_atoui(argv[5]);
-// 	return (EXIT_SUCCESS);
-// }
-
 int	main(int argc, char **argv)
 {
-	t_params	params;
+	t_table		table;
 
-	if (set_params(&params, argc, argv) == EXIT_FAILURE)
+	table.start_routine = false;
+	if (set_params(&table.params, argc, argv) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	if (init_table(&table, table.params) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	// if (verify_arg_count(argc) == EXIT_FAILURE)
 	// 	return (EXIT_FAILURE);

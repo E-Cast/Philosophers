@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/05 12:21:04 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/05 14:00:10 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <string.h>
+# include <stdbool.h>//
 # include <stdlib.h> //
 # include <stdio.h> //
 
@@ -53,19 +54,33 @@ typedef struct s_parameters
 	int				times_eaten;
 }	t_params;
 
-// typedef enum e_states
-// {
-// 	EATING,
-// 	SLEEPING,
-// 	THINKING
-// }	t_states;
+typedef enum e_states
+{
+	EATING,
+	SLEEPING,
+	THINKING,
+	DEAD
+}	t_states;
 
-// typedef struct s_philosopher
-// {
-// 	unsigned int	id;
-// 	pthread_t		thread;
-// 	t_states		state;
-// }	t_philo;
+typedef struct s_philosopher
+{
+	unsigned int	id;
+	pthread_t		*thread;
+	pthread_mutex_t	*r_fork;
+	pthread_mutex_t	*l_fork;
+	t_states		state;
+	unsigned int	times_eaten;
+	unsigned int	time_last_eaten;
+}	t_philo;
+
+typedef struct s_table
+{
+	t_params		params;
+	bool			start_routine;
+	pthread_t		*threads;
+	t_philo			*philos;
+	pthread_mutex_t	*forks;
+}	t_table;
 
 // typedef struct s_table
 // {
@@ -80,10 +95,16 @@ typedef struct s_parameters
 
 /*params.c*/
 
-int	set_params(t_params *params, int argc, char **argv);
+int		set_params(t_params *params, int argc, char **argv);
+
+/*table.c*/
+
+void	init_philos(unsigned int philo_count, t_table *table);
+int		init_table(t_table *table, t_params params);
 
 /*utils.c*/
 
-int	ph_atoui(const char *str);
+void	*ph_calloc(size_t count, size_t size);
+int		ph_atoui(const char *str);
 
 #endif

@@ -65,6 +65,6 @@ int	set_params(t_params *p, int argc, char **argv)
 	p->times_eaten = DEFAULT_TIMES_EATEN_TO_END;
 	// if (argc == 6)
 	// 	p->times_eaten_to_end = ph_atoui(argv[5]);
-	// printf("count:%i\ndie:%i\neat:%i\nsleep:%i\nend:%i\n", p->philo_count, p->time_to_die, p->time_to_eat, p->time_to_sleep, p->times_eaten_to_end);
+	// printf("count:%i\ndie:%i\neat:%i\nsleep:%i\nend:%i\n", p->philo_count, p->time_to_die, p->time_to_eat, p->time_to_sleep, p->times_eaten);
 	return (check_params(p));
 }
