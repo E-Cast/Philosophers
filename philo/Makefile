@@ -1,4 +1,6 @@
-SRC				=	main.c
+SRC				=	main.c \
+					params.c \
+					utils.c
 
 SRC_DIR			:=	sources/
 OBJ_DIR			:=	objects/
@@ -7,7 +9,7 @@ OBJ				:=	$(subst $(SRC_DIR), $(OBJ_DIR), $(SRC:.c=.o))
 NAME			:=	philo
 
 # DEBUG			:=	-g 
-CC				:=	gcc -Wall -Werror -Wextra $(DEBUG)
+CC				:=	gcc -Wall -Werror -Wextra -pthread $(DEBUG)
 INC_DIR			:= 	includes
 INCLUDES		:=	-I $(INC_DIR)
 
