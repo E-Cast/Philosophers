@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/05 14:00:10 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/06 11:14:50 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <string.h>
+# include <sys/time.h>
 # include <stdbool.h>//
 # include <stdlib.h> //
 # include <stdio.h> //
@@ -71,6 +72,8 @@ typedef struct s_philosopher
 	t_states		state;
 	unsigned int	times_eaten;
 	unsigned int	time_last_eaten;
+
+	t_params		params;
 }	t_philo;
 
 typedef struct s_table
@@ -99,7 +102,7 @@ int		set_params(t_params *params, int argc, char **argv);
 
 /*table.c*/
 
-void	init_philos(unsigned int philo_count, t_table *table);
+void	init_philos(t_params params, t_table *table);
 int		init_table(t_table *table, t_params params);
 
 /*utils.c*/
