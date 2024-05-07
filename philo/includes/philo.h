@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/06 11:14:50 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/07 10:52:31 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,10 @@ typedef struct s_table
 /*params.c*/
 
 int		set_params(t_params *params, int argc, char **argv);
+
+/*routine.c*/
+
+void	*routine(void *param);
 
 /*table.c*/
 

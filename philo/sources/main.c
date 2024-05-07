@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:48 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/06 11:13:32 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/07 10:52:34 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,33 +31,6 @@
 	//...
 //terminate
 	//...
-
-void	*routine(void *param)
-{
-	t_philo			*philo;
-	struct timeval	time;
-
-	philo = (t_philo *)param;
-	gettimeofday(&time, NULL);
-	philo->time_last_eaten = time.tv_usec;
-	// usleep(600000);
-	// printf("%i done\n", philo->id);
-	while (philo->state != DEAD)
-	{
-		gettimeofday(&time, NULL);
-		if (time.tv_usec - philo->time_last_eaten >= philo->params.time_to_die)
-		{
-			philo->state = DEAD;
-			break ;
-		}
-	}
-	if (philo->state == DEAD)
-	{
-		gettimeofday(&time, NULL);
-		printf("%i %i died\n", time.tv_usec, philo->id);
-	}
-	return (NULL);
-}
 
 int	launch_threads(t_table *table, t_params params)
 {
