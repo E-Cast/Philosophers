@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 10:51:49 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/07 11:17:55 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/07 11:21:34 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,30 @@ void	eat(t_philo *philo, unsigned int time_to_eat)
 	return ;
 }
 
-// void	sleep(t_philo *philo, unsigned int time_to_sleep)
+void	sleep(t_philo *philo, unsigned int time_to_sleep)
+{
+	struct timeval	time;
+
+	pthread_mutex_lock(&philo->state);
+	gettimeofday(&time, NULL);
+	printf("%i %i is sleeping\n", time.tv_usec, philo->id);
+	philo->state = SLEEPING;
+	pthread_mutex_unlock(&philo->state);
+	usleep(time_to_sleep);
+	return ;
+}
+
+void	think(t_philo *philo)
+{
+	struct timeval	time;
+
+	pthread_mutex_lock(&philo->state);
+	gettimeofday(&time, NULL);
+	printf("%i %i is thinking\n", time.tv_usec, philo->id);
+	philo->state = THINKING;
+	pthread_mutex_unlock(&philo->state);
+	return ;
+}
 
 void	*routine(void *arg)
 {
@@ -60,8 +83,8 @@ void	*routine(void *arg)
 		if (state == EATING)
 		{
 			eat((t_philo *)arg, params.time_to_eat);
-			//sleep
-			//set state to think
+			sleep((t_philo *)arg, params.time_to_sleep);
+			think((t_philo *)arg);
 		}
 	}
 }
