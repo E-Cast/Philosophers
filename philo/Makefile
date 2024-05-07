@@ -1,5 +1,6 @@
 SRC				=	main.c \
 					params.c \
+					routine.c \
 					table.c \
 					utils.c
 
