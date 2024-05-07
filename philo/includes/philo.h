@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/07 10:52:31 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/07 10:56:59 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef struct s_philosopher
 	pthread_t		*thread;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
-	t_states		state;
+	pthread_mutex_t	*state;
 	unsigned int	times_eaten;
 	unsigned int	time_last_eaten;
 
