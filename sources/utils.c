@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 10:54:07 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/05 13:09:04 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/08 09:07:35 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,29 +23,4 @@ void	*ph_calloc(size_t count, size_t size)
 		return (NULL);
 	memset(ptr, 0, count * size);
 	return ((void *)ptr);
-}
-
-/*Converts the initial portion of the string into an
-	unsigned integer and returns it.*/
-int	ph_atoui(const char *str)
-{
-	size_t	i;
-	int		sign;
-	int		num;
-
-	if (!str)
-		return (0);
-	i = 0;
-	sign = 1;
-	num = 0;
-	while (str[i] && ((str[i] >= 9 && str[i] <= 13) || str[i] == ' '))
-		i++;
-	if (str[i] && (str[i] == '+' || str[i] == '-'))
-		i++;
-	while (str[i] && (str[i] >= '0' && str[i] <= '9'))
-	{
-		num = num * 10 + (str[i] - 48) * sign;
-		i++;
-	}
-	return (num);
 }

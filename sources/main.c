@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:48 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/08 09:00:52 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/08 09:17:36 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,30 +32,12 @@
 //terminate
 	//...
 
-int	launch_threads(t_table *table, t_params params)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (i < params.philo_count)
-	{
-		pthread_create(&table->threads[i], NULL, &routine, (void *)&table->philos[i]);
-		usleep(100);
-		i++;
-	}
-	return (EXIT_SUCCESS);
-}
-
 int	main(int argc, char **argv)
 {
 	t_params	params;
-	t_table		table;
+	// t_table		table;
 
-	if (set_params(&params, argc, argv) == EXIT_FAILURE)
+	if (set_params(&params, argc, argv) != 0)
 		return (EXIT_FAILURE);
-	if (init_table(&table, params) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	launch_threads(&table, params);
-	usleep(UINT32_MAX);
 	return (EXIT_SUCCESS);
 }

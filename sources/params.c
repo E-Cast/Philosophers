@@ -29,42 +29,70 @@ int	check_arg_count(int argc)
 	return (EXIT_FAILURE);
 }
 
+int	ft_atoi(const char *str)
+{
+	size_t	i;
+	int		sign;
+	int		num;
+
+	if (!str)
+		return (0);
+	i = 0;
+	sign = 1;
+	num = 0;
+	while (str[i] && my_isspace(str[i]))
+		i++;
+	if (str[i] && str[i] == '-')
+		sign = -1;
+	if (str[i] && (str[i] == '+' || str[i] == '-'))
+		i++;
+	while (str[i] && (ft_isdigit(str[i])))
+	{
+		num = num * 10 + (str[i] - 48) * sign;
+		i++;
+	}
+	return (num);
+}
+
 int	check_params(t_params *p)
 {
-	int	check;
+	int	retval;
 
-	check = 0;
+	retval = 0;
 	if (p->philo_count < MIN_PHILO_COUNT)
-		check += printf("Error: <philosopher_count> is too low\nMin: %i\n",
+		retval += printf("Error: <philosopher_count> is too low\nMin: %i\n",
 				MIN_PHILO_COUNT);
 	if (p->philo_count > MAX_PHILO_COUNT)
-		check += printf("Error: <philosopher_count> is too high\nMax: %i\n",
+		retval += printf("Error: <philosopher_count> is too high\nMax: %i\n",
 				MAX_PHILO_COUNT);
 	if (p->time_to_die < MIN_TIME_TO_DIE)
-		check += printf("Error: <time_to_die> is too low\nMin: %i\n",
+		retval += printf("Error: <time_to_die> is too low\nMin: %i\n",
 				MIN_TIME_TO_DIE);
 	if (p->time_to_eat < MIN_TIME_TO_EAT)
-		check += printf("Error: <time_to_eat> is too low\nMin: %i\n",
+		retval += printf("Error: <time_to_eat> is too low\nMin: %i\n",
 				MIN_TIME_TO_EAT);
 	if (p->time_to_sleep < MIN_TIME_TO_SLEEP)
-		check += printf("Error: <time_to_sleep> is too low\nMin: %i\n",
+		retval += printf("Error: <time_to_sleep> is too low\nMin: %i\n",
 				MIN_TIME_TO_SLEEP);
-	if (check != 0)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	if (p->times_eaten < 0 && retval == 0)
+	{
+		printf("Warning: <times_eaten> is smaller than 0\n");
+		printf("Parameter will go unused\n");
+	}
+	return (retval);
 }
 
 int	set_params(t_params *p, int argc, char **argv)
 {
 	if (check_arg_count(argc) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	p->philo_count = ph_atoui(argv[1]);
-	p->time_to_die = ph_atoui(argv[2]);
-	p->time_to_eat = ph_atoui(argv[3]);
-	p->time_to_sleep = ph_atoui(argv[4]);
+	p->philo_count = ft_atoi(argv[1]);
+	p->time_to_die = ft_atoi(argv[2]);
+	p->time_to_eat = ft_atoi(argv[3]);
+	p->time_to_sleep = ft_atoi(argv[4]);
 	p->times_eaten = DEFAULT_TIMES_EATEN_TO_END;
-	// if (argc == 6)
-	// 	p->times_eaten_to_end = ph_atoui(argv[5]);
+	if (argc == 6)
+		p->times_eaten = ft_atoi(argv[5]);
 	// printf("count:%i\ndie:%i\neat:%i\nsleep:%i\nend:%i\n", p->philo_count, p->time_to_die, p->time_to_eat, p->time_to_sleep, p->times_eaten);
 	return (check_params(p));
 }

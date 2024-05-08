@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/08 09:00:49 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/08 09:09:33 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@
 
 typedef struct s_parameters
 {
-	unsigned int	philo_count;
-	unsigned int	time_to_die;
-	unsigned int	time_to_eat;
-	unsigned int	time_to_sleep;
-	int				times_eaten;
+	int	philo_count;
+	int	time_to_die;
+	int	time_to_eat;
+	int	time_to_sleep;
+	int	times_eaten;
 }	t_params;
 
 typedef enum e_states
