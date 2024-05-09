@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 09:45:07 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/09 14:14:07 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/09 14:16:08 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,6 @@ int	set_table(t_table *table, t_params params)
 	{
 		pthread_mutex_init(&table->forks[index], NULL);
 		table->philos[index] = make_philo(table, params, index);
-		index++;
-	}
-	index = 0;
-	while (index < params.philo_count)
-	{
 		pthread_create(&table->threads[index], NULL, routine,
 			(void *)&table->philos[index]);//
 		usleep(1);

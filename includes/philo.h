@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/09 14:07:02 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/09 14:27:03 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef struct s_philosopher
 	bool			*can_eat;
 	bool			*dead;
 	// t_state			state;
-	// t_time			time_last_eaten;
+	t_time			time_last_eaten;
 	// int				times_eaten;
 	pthread_mutex_t	*fork_r;
 	pthread_mutex_t	*fork_l;
