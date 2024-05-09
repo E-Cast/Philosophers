@@ -17,15 +17,15 @@ int	check_arg_count(int argc)
 	if (argc >= 5 && argc <= 6)
 		return (EXIT_SUCCESS);
 	if (argc < 5)
-		write(STDERR_FILENO, "Error: not enough arguments\n", 28);
+		printf("Error: not enough arguments\n");
 	else if (argc > 6)
-		write(STDERR_FILENO, "Error: too many arguments\n", 26);
-	write(STDERR_FILENO, "Format: ./philo\n", 16);
-	write(STDERR_FILENO, "<philosopher_count>\n", 22);
-	write(STDERR_FILENO, "<time_to_die>\n", 15);
-	write(STDERR_FILENO, "<time_to_eat>\n", 15);
-	write(STDERR_FILENO, "<time_to_sleep>\n", 17);
-	write(STDERR_FILENO, "[times_eaten]\n", 32);
+		printf("Error: too many arguments\n");
+	printf("Format: ./philo\n");
+	printf("<philosopher_count>\n");
+	printf("<time_to_die>\n");
+	printf("<time_to_eat>\n");
+	printf("<time_to_sleep>\n");
+	printf("[times_eaten]\n");
 	return (EXIT_FAILURE);
 }
 
@@ -54,7 +54,7 @@ int	ft_atoi(const char *str)
 	return (num);
 }
 
-int	check_params(t_params *p)
+int	check_params(t_params *p, int argc)
 {
 	int	retval;
 
@@ -74,7 +74,7 @@ int	check_params(t_params *p)
 	if (p->time_to_sleep < MIN_TIME_TO_SLEEP)
 		retval += printf("Error: <time_to_sleep> is too low\nMin: %i\n",
 				MIN_TIME_TO_SLEEP);
-	if (p->times_eaten < 0 && retval == 0)
+	if (argc == 6 && p->times_eaten < 0 && retval == 0)
 	{
 		printf("Warning: <times_eaten> is smaller than 0\n");
 		printf("Parameter will go unused\n");
@@ -94,5 +94,5 @@ int	set_params(t_params *p, int argc, char **argv)
 	if (argc == 6)
 		p->times_eaten = ft_atoi(argv[5]);
 	// printf("count:%i\ndie:%i\neat:%i\nsleep:%i\nend:%i\n", p->philo_count, p->time_to_die, p->time_to_eat, p->time_to_sleep, p->times_eaten);
-	return (check_params(p));
+	return (check_params(p, argc));
 }
