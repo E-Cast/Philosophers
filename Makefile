@@ -1,8 +1,6 @@
 SRC				=	main.c \
 					params.c \
-					routine.c \
 					table.c \
-					utils.c
 
 SRC_DIR			:=	sources/
 OBJ_DIR			:=	objects/

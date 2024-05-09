@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/08 10:05:15 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/09 14:07:02 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,26 +69,24 @@ typedef struct s_philosopher
 	t_params		params;
 
 	int				id;
-	t_state			state;
+	bool			*can_eat;
+	bool			*dead;
+	// t_state			state;
 	// t_time			time_last_eaten;
 	// int				times_eaten;
-
-	pthread_mutex_t	*fork_l;
 	pthread_mutex_t	*fork_r;
-	pthread_mutex_t	*info_lock;
-	bool			*can_eat;
-	// bool			*dead;
+	pthread_mutex_t	*fork_l;
+	// pthread_mutex_t	*info_lock;
 }	t_philo;
 
 typedef struct s_table
 {
-	int				*times_eaten;
-
+	// int				*times_eaten;
 	pthread_mutex_t	*forks;
 	t_philo			*philos;
-	pthread_mutex_t	*info_lock;
+	// pthread_mutex_t	*info_lock;
 	bool			*can_eat;
-	// bool			*dead;
+	bool			*dead;
 	pthread_t		*threads;
 }	t_table;
 
@@ -96,14 +94,16 @@ typedef struct s_table
 // {
 // 	unsigned int	id;
 // 	pthread_t		*thread;
-// 	pthread_mutex_t	*r_fork;
-// 	pthread_mutex_t	*l_fork;
+	// pthread_mutex_t	*r_fork;
+	// pthread_mutex_t	*l_fork;
 // 	pthread_mutex_t	*state;
 // 	unsigned int	times_eaten;
 // 	unsigned int	time_last_eaten;
 
 // 	t_params		params;
 // }	t_philo;
+
+void	*routine(void *param);
 
 /*params.c*/
 
@@ -120,6 +120,7 @@ int		set_params(t_params *params, int argc, char **argv);
 
 // void	init_philos(t_params params, t_table *table);
 // int		init_table(t_table *table, t_params params);
+int		set_table(t_table *table, t_params params);
 
 // /*utils.c*/
 
