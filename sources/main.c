@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:48 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/11 14:29:59 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/11 14:33:26 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,17 +200,16 @@ void	*dine(void *arg)
 	philo = (t_philo *)arg;
 	pthread_mutex_lock(&philo->super->lock);
 	gettimeofday(&time, NULL);
-	*philo.time_last_eaten = time;
+	philo->super->time_last_eaten = time;
 	pthread_mutex_unlock(&philo->super->lock);
-	printf("%li %i is thinking\n", time.tv_usec, philo.id);
-	if (pthread_create(&thread, NULL, supervisor, philo.super) != 0)//
+	printf("%li %i is thinking\n", time.tv_usec, philo->id);
+	if (pthread_create(&thread, NULL, supervisor, philo->super) != 0)//
 		return (NULL);
-	alive = true;//
 	while (true)
 	{
-		gettimeofday(&time, NULL);
-		// alive = *philo.alive;
-		pthread_mutex_unlock(&philo.sup_lock);
+		pthread_mutex_lock(&philo->super->lock);
+		alive = philo->super->alive;
+		pthread_mutex_unlock(&philo->super->lock);
 		if (alive == false)
 			break ;
 	}
