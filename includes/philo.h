@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/10 22:06:25 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/10 22:21:23 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,13 +124,14 @@ typedef struct s_philosopher_shared
 	t_params		params;
 	int				id;
 
-	pthread_mutex_t	*fork_r;
 	pthread_mutex_t	*fork_l;
+	pthread_mutex_t	*fork_r;
 	pthread_mutex_t	*lock;
 	t_time			*time_last_eaten;
 	bool			*can_eat;
 	bool			*eating;
 	bool			*dead;
+	pthread_mutex_t	sup_lock;
 }	t_philo;
 
 typedef struct s_table
@@ -153,7 +154,7 @@ typedef struct s_monitor
 
 /*init.c*/
 
-int		init_table(t_table **table, int philo_count);
+int		init_table(t_table **table, t_params params);
 
 /*params.c*/
 

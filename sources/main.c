@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:48 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/09 22:04:12 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/10 22:22:55 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,36 +135,36 @@
 // 	}
 // }
 
-void	*monitor(void *args)
-{
-	t_params	params;
-	t_table		*table;
-	int			index;
+// void	*monitor(void *args)
+// {
+// 	t_params	params;
+// 	t_table		*table;
+// 	int			index;
 
-	params = ((t_monitor *)args)->params;
-	table = ((t_monitor *)args)->table;
-	printf("philo_count:%i\n", params.philo_count);
-	while (true)
-	{
-		index = 0;
-	}
-	(void) index;
-	(void) table;
-	(void) params;
-}
+// 	params = ((t_monitor *)args)->params;
+// 	table = ((t_monitor *)args)->table;
+// 	printf("philo_count:%i\n", params.philo_count);
+// 	while (true)
+// 	{
+// 		index = 0;
+// 	}
+// 	(void) index;
+// 	(void) table;
+// 	(void) params;
+// }
 
-int	launch_threads(t_table *table, t_params params)
-{
-	pthread_t	m_thread;
-	t_monitor	monitor_args;
+// int	launch_threads(t_table *table, t_params params)
+// {
+// 	pthread_t	m_thread;
+// 	t_monitor	monitor_args;
 
-	monitor_args.params = params;
-	monitor_args.table = table;
-	// if (pthread_create(&m_thread, NULL, monitor, &monitor_args) != 0)
-		// return (-1);
-	pthread_create(&m_thread, NULL, monitor, (void *)&((t_monitor){.params = params, .table = table}));
-	return (m_thread);
-}
+// 	monitor_args.params = params;
+// 	monitor_args.table = table;
+// 	// if (pthread_create(&m_thread, NULL, monitor, &monitor_args) != 0)
+// 		// return (-1);
+// 	pthread_create(&m_thread, NULL, monitor, (void *)&((t_monitor){.params = params, .table = table}));
+// 	return (m_thread);
+// }
 
 int	main(int argc, char **argv)
 {
@@ -173,10 +173,10 @@ int	main(int argc, char **argv)
 
 	if (set_params(&params, argc, argv) != 0)
 		return (EXIT_FAILURE);
-	if (init_table(&table, params.philo_count) == EXIT_FAILURE)
+	if (init_table(&table, params) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	if (launch_threads(table, params) == EXIT_FAILURE)
-		return (free(table), EXIT_FAILURE);
+	// if (launch_threads(table, params) == EXIT_FAILURE)
+	// 	return (free(table), EXIT_FAILURE);
 	//there should be no threads running by the launch returns;
 	free(table);
 	return (EXIT_SUCCESS);

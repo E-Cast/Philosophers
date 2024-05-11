@@ -6,11 +6,55 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 09:45:07 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/10 22:07:33 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/10 22:32:03 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+// typedef struct s_philosopher_shared
+// {
+// 	t_params		params;//
+// 	int				id;//
+
+// 	pthread_mutex_t	*fork_r;//
+// 	pthread_mutex_t	*fork_l;//
+// 	pthread_mutex_t	*lock;//
+// 	t_time			*time_last_eaten;//
+// 	bool			*can_eat;//
+// 	bool			*eating;//
+// 	bool			*dead;//
+// }	t_philo;
+
+// int	thread_mutex_init(pthread_mutex_t *mutex, void *arg)
+// {
+// 	return (1);
+// 	(void) mutex;
+// 	(void) arg;
+// }
+
+int	make_philo(t_table **table, t_params params, int index)
+{
+	t_philo	philo;
+
+	if (pthread_mutex_init(&philo.sup_lock, NULL) != 0)
+		return (printf("Error: failed to init mutex\n"), EXIT_FAILURE);
+	philo.params = params;
+	philo.id = index + 1;
+	philo.fork_l = &(*table)[index].fork;
+	if (params.philo_count >= 1)
+		philo.fork_r = NULL;
+	else if (index + 1 == params.philo_count)
+		philo.fork_r = &(*table)[0].fork;
+	else
+		philo.fork_r = &(*table)[index].fork;
+	philo.lock = &(*table)[index].lock;
+	philo.time_last_eaten = &(*table)[index].time_last_eaten;
+	philo.can_eat = &(*table)[index].can_eat;
+	philo.eating = &(*table)[index].eating;
+	philo.dead = &(*table)[index].dead;
+	return (EXIT_SUCCESS);
+}
 
 int	init_table(t_table **table, t_params params)
 {
