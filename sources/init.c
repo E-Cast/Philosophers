@@ -6,31 +6,62 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 09:45:07 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/09 19:03:10 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/10 22:07:33 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// typedef struct s_table
-// {
-	// pthread_mutex_t	fork;
-	// pthread_mutex_t	lock;
-	// t_time			time_last_eaten;
-	// bool			can_eat;
-	// bool			eating;
-	// bool			dead;
-	// pthread_t		thread;
-// }	t_table;
-
 int	init_table(t_table **table, t_params params)
 {
+	int		index;
+
 	*table = malloc((params.philo_count + 1) * sizeof(t_table));
 	if (!(*table))
 		return (printf("Error: failed to alloc memory\n"), EXIT_FAILURE);
 	memset(*table, 0, params.philo_count + 1);
+	index = 0;
+	while (index < params.philo_count)
+	{
+		if (pthread_mutex_init(&(*table)[index].fork, NULL) != 0)
+			return (free(*table), printf("Error: failed to init mutex\n"),
+				EXIT_FAILURE);
+		if (pthread_mutex_init(&(*table)[index].lock, NULL) != 0)
+			return (free(*table), printf("Error: failed to init mutex\n"),
+				EXIT_FAILURE);
+		if (make_philo(table, params, index) == EXIT_FAILURE)
+			return (free(*table), EXIT_FAILURE);
+		(*table)[index].time_last_eaten = (t_time){.tv_sec = 0, .tv_usec = 0};
+		(*table)[index].can_eat = false;
+		(*table)[index].eating = false;
+		(*table)[index].dead = false;
+		index++;
+	}
 	return (EXIT_SUCCESS);
 }
+
+// int	init_table(t_table **t, t_params params)
+// {
+// 	int		index;
+// 	t_table	*table;//temporary measure, change **t back to **table and remove this later
+
+// 	table = malloc((params.philo_count + 1) * sizeof(t_table));
+// 	if (!table)
+// 		return (printf("Error: failed to alloc memory\n"), EXIT_FAILURE);
+// 	memset(table, 0, params.philo_count + 1);
+// 	index = 0;
+// 	while (index < params.philo_count)
+// 	{
+// 		pthread_mutex_init(&table[index].fork, NULL);//
+// 		pthread_mutex_init(&table[index].lock, NULL);//
+// 		table[index].can_eat = false;
+// 		table[index].eating = false;
+// 		table[index].dead = false;
+// 		index++;
+// 	}
+// 	*t = table;//
+// 	return (EXIT_SUCCESS);
+// }
 
 // #include "philo.h"
 

@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/09 18:59:09 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/10 22:06:25 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,9 +108,34 @@ typedef struct timeval	t_time;
 // // }	t_philo;
 
 // void	*routine(void *param);
+typedef struct s_supervisor_shared
+{
+	t_params		params;
+	int				id;
+
+	pthread_mutex_t	*lock;
+	bool			*eating;
+	int				*time_last_eaten;
+	bool			*dead;
+}	t_super;
+
+typedef struct s_philosopher_shared
+{
+	t_params		params;
+	int				id;
+
+	pthread_mutex_t	*fork_r;
+	pthread_mutex_t	*fork_l;
+	pthread_mutex_t	*lock;
+	t_time			*time_last_eaten;
+	bool			*can_eat;
+	bool			*eating;
+	bool			*dead;
+}	t_philo;
 
 typedef struct s_table
 {
+	t_philo			philo;
 	pthread_mutex_t	fork;
 	pthread_mutex_t	lock;
 	t_time			time_last_eaten;
@@ -120,9 +145,15 @@ typedef struct s_table
 	pthread_t		thread;
 }	t_table;
 
+typedef struct s_monitor
+{
+	t_table		*table;
+	t_params	params;
+}	t_monitor;
+
 /*init.c*/
 
-int		init_table(t_table **table, t_params params);
+int		init_table(t_table **table, int philo_count);
 
 /*params.c*/
 
