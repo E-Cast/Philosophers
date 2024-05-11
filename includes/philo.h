@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/11 00:31:05 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/11 12:45:45 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ typedef struct s_supervisor_shared
 	pthread_mutex_t	*lock;
 	bool			*eating;
 	int				*time_last_eaten;
-	bool			*dead;
+	bool			*alive;
 }	t_super;
 
 typedef struct s_philosopher_shared
@@ -131,7 +131,7 @@ typedef struct s_philosopher_shared
 	t_time			*time_last_eaten;
 	bool			*can_eat;
 	bool			*eating;
-	bool			*dead;
+	bool			*alive;
 	pthread_mutex_t	sup_lock;
 }	t_philo;
 

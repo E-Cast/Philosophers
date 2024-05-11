@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:48 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/11 00:50:17 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/11 12:57:09 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,13 +162,60 @@
 // 	return (1);
 // }
 
+void	*supervisor(void *arg)
+{
+	t_philo		philo;
+	t_time		time;
+	t_time		last_eaten;
+	// bool		eating;
+	// bool		alive;
+
+	philo = *(t_philo *)arg;
+	while (true)
+	{
+		pthread_mutex_lock(&philo.sup_lock);
+		last_eaten = *philo.time_last_eaten;
+		pthread_mutex_unlock(&philo.sup_lock);
+		gettimeofday(&time, NULL);
+		if (time.tv_usec - last_eaten.tv_usec >= philo.params.time_to_die)
+		{
+			printf("%li %i died\n", time.tv_usec, philo.id);
+			pthread_mutex_lock(&philo.sup_lock);
+			// *philo.alive = false;
+			pthread_mutex_unlock(&philo.sup_lock);
+			break ;
+		}
+	}
+	return (arg);
+}
+
 void	*dine(void *arg)
 {
-	t_philo	*philo;
+	t_philo		philo;
+	pthread_t	thread;
+	t_time		time;
+	bool		alive;
 
-	philo = (t_philo *)arg;
-	printf("%i\n", philo->id);
-	return (philo);
+	philo = *(t_philo *)arg;
+	// philo.alive = true;
+	pthread_mutex_lock(&philo.sup_lock);
+	gettimeofday(&time, NULL);
+	*philo.time_last_eaten = time;
+	pthread_mutex_unlock(&philo.sup_lock);
+	printf("%li %i is thinking\n", time.tv_usec, philo.id);
+	if (pthread_create(&thread, NULL, supervisor, arg) != 0)//
+		return (NULL);
+	alive = true;//
+	while (true)
+	{
+		gettimeofday(&time, NULL);
+		// alive = *philo.alive;
+		pthread_mutex_unlock(&philo.sup_lock);
+		if (alive == false)
+			break ;
+	}
+	pthread_join(thread, NULL);
+	return (arg);
 }
 
 void	*start_philos(void *arg)
@@ -183,7 +230,7 @@ void	*start_philos(void *arg)
 	index = 0;
 	while (index < params.philo_count)
 	{
-		printf("index:%i id:%i\n", index, table[index].philo.id);
+		usleep(1);//
 		if (pthread_create(&table[index].thread, NULL, dine,
 			(void *)&table[index].philo) != 0)//
 			break ;
