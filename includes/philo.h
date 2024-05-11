@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/11 12:45:45 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/11 14:25:25 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,10 @@ typedef struct s_supervisor_shared
 	t_params		params;
 	int				id;
 
-	pthread_mutex_t	*lock;
-	bool			*eating;
-	int				*time_last_eaten;
-	bool			*alive;
+	pthread_mutex_t	lock;
+	t_time			time_last_eaten;
+	bool			eating;//
+	bool			alive;
 }	t_super;
 
 typedef struct s_philosopher_shared
@@ -127,32 +127,34 @@ typedef struct s_philosopher_shared
 
 	pthread_mutex_t	*fork_l;
 	pthread_mutex_t	*fork_r;
-	pthread_mutex_t	*lock;
-	t_time			*time_last_eaten;
-	bool			*can_eat;
-	bool			*eating;
-	bool			*alive;
-	pthread_mutex_t	sup_lock;
+
+	pthread_mutex_t	lock;
+	bool			can_eat;
+	bool			eating;
+	bool			alive;
+
+	t_super			*super;
+	// pthread_t		s_thread;
 }	t_philo;
 
 typedef struct s_table
 {
-	t_philo			philo;
+	t_philo			*philo;
 	pthread_mutex_t	fork;
-	pthread_mutex_t	lock;
-	t_time			time_last_eaten;
-	bool			can_eat;
-	bool			eating;
-	bool			dead;
 	pthread_t		thread;
+	// pthread_mutex_t	lock;
+	// t_time			time_last_eaten;
+	// bool			can_eat;
+	// bool			eating;
+	// bool			dead;
 }	t_table;
 
-typedef struct s_monitor
-{
-	pthread_t	thread;
-	t_table		*table;
-	t_params	params;
-}	t_monitor;
+// typedef struct s_monitor
+// {
+// 	pthread_t	thread;
+// 	t_table		*table;
+// 	t_params	params;
+// }	t_monitor;
 
 /*init.c*/
 

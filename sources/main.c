@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:48 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/11 12:57:09 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/11 14:29:59 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,48 +162,48 @@
 // 	return (1);
 // }
 
+// pthread_mutex_lock(&super->lock);
+// pthread_mutex_unlock(&super->lock);
 void	*supervisor(void *arg)
 {
-	t_philo		philo;
+	t_super		*super;
 	t_time		time;
-	t_time		last_eaten;
-	// bool		eating;
-	// bool		alive;
+	t_time		time_last_eaten;
 
-	philo = *(t_philo *)arg;
+	super = (t_super *)arg;
 	while (true)
 	{
-		pthread_mutex_lock(&philo.sup_lock);
-		last_eaten = *philo.time_last_eaten;
-		pthread_mutex_unlock(&philo.sup_lock);
+		pthread_mutex_lock(&super->lock);
+		time_last_eaten = super->time_last_eaten;
+		// pthread_mutex_unlock(&super->lock);
 		gettimeofday(&time, NULL);
-		if (time.tv_usec - last_eaten.tv_usec >= philo.params.time_to_die)
+		if (time.tv_usec - time_last_eaten.tv_usec >= super->params.time_to_die)
 		{
-			printf("%li %i died\n", time.tv_usec, philo.id);
-			pthread_mutex_lock(&philo.sup_lock);
-			// *philo.alive = false;
-			pthread_mutex_unlock(&philo.sup_lock);
+			printf("%li %i died\n", time.tv_usec, super->id);
+			// pthread_mutex_lock(&super->lock);
+			super->alive = false;
+			// pthread_mutex_unlock(&super->lock);
 			break ;
 		}
+		pthread_mutex_unlock(&super->lock);//
 	}
 	return (arg);
 }
 
 void	*dine(void *arg)
 {
-	t_philo		philo;
-	pthread_t	thread;
+	t_philo		*philo;
 	t_time		time;
+	pthread_t	thread;
 	bool		alive;
 
-	philo = *(t_philo *)arg;
-	// philo.alive = true;
-	pthread_mutex_lock(&philo.sup_lock);
+	philo = (t_philo *)arg;
+	pthread_mutex_lock(&philo->super->lock);
 	gettimeofday(&time, NULL);
 	*philo.time_last_eaten = time;
-	pthread_mutex_unlock(&philo.sup_lock);
+	pthread_mutex_unlock(&philo->super->lock);
 	printf("%li %i is thinking\n", time.tv_usec, philo.id);
-	if (pthread_create(&thread, NULL, supervisor, arg) != 0)//
+	if (pthread_create(&thread, NULL, supervisor, philo.super) != 0)//
 		return (NULL);
 	alive = true;//
 	while (true)
@@ -220,13 +220,13 @@ void	*dine(void *arg)
 
 void	*start_philos(void *arg)
 {
-	t_params	params;
 	t_table		*table;
+	t_params	params;
 	int			index;
 	int			jndex;
 
-	params = ((t_monitor *)arg)->params;
-	table = ((t_monitor *)arg)->table;
+	table = (t_table *)arg;
+	params = table[0].philo->params;
 	index = 0;
 	while (index < params.philo_count)
 	{
@@ -246,19 +246,18 @@ int	main(int argc, char **argv)
 {
 	t_params	params;
 	t_table		*table;
-	t_monitor	arg;
+	pthread_t	thread;
 
 	if (set_params(&params, argc, argv) != 0)
 		return (EXIT_FAILURE);
 	if (init_table(&table, params) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	arg = (t_monitor){.params = params, .table = table};
-	if (pthread_create(&arg.thread, NULL, start_philos, (void *)&arg) != 0)
+	if (pthread_create(&thread, NULL, start_philos, (void *)table) != 0)
 		return (free(table), printf("Error: failed to create thread\n"),
 			EXIT_FAILURE);
 	//coordinate threads
 	//there should be no threads running by the time coordiate returns;
-	pthread_join(arg.thread, NULL);
+	pthread_join(thread, NULL);
 	free(table);
 	return (EXIT_SUCCESS);
 }
