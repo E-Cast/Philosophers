@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:48 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/10 22:22:55 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/11 00:50:17 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,31 +153,65 @@
 // 	(void) params;
 // }
 
-// int	launch_threads(t_table *table, t_params params)
+// int	thread_create(pthread_t *t, pthread_attr_t *t_a, void *(* routine)(void *), void *arg)
 // {
-// 	pthread_t	m_thread;
-// 	t_monitor	monitor_args;
-
-// 	monitor_args.params = params;
-// 	monitor_args.table = table;
-// 	// if (pthread_create(&m_thread, NULL, monitor, &monitor_args) != 0)
-// 		// return (-1);
-// 	pthread_create(&m_thread, NULL, monitor, (void *)&((t_monitor){.params = params, .table = table}));
-// 	return (m_thread);
+// 	(void) t;
+// 	(void) t_a;
+// 	(void) routine;
+// 	(void) arg;
+// 	return (1);
 // }
+
+void	*dine(void *arg)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	printf("%i\n", philo->id);
+	return (philo);
+}
+
+void	*start_philos(void *arg)
+{
+	t_params	params;
+	t_table		*table;
+	int			index;
+	int			jndex;
+
+	params = ((t_monitor *)arg)->params;
+	table = ((t_monitor *)arg)->table;
+	index = 0;
+	while (index < params.philo_count)
+	{
+		printf("index:%i id:%i\n", index, table[index].philo.id);
+		if (pthread_create(&table[index].thread, NULL, dine,
+			(void *)&table[index].philo) != 0)//
+			break ;
+		index++;
+	}
+	jndex = 0;
+	while (jndex < index)
+		pthread_join(table[jndex++].thread, NULL);
+	return (table);
+}
 
 int	main(int argc, char **argv)
 {
 	t_params	params;
 	t_table		*table;
+	t_monitor	arg;
 
 	if (set_params(&params, argc, argv) != 0)
 		return (EXIT_FAILURE);
 	if (init_table(&table, params) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	// if (launch_threads(table, params) == EXIT_FAILURE)
-	// 	return (free(table), EXIT_FAILURE);
-	//there should be no threads running by the launch returns;
+	arg = (t_monitor){.params = params, .table = table};
+	if (pthread_create(&arg.thread, NULL, start_philos, (void *)&arg) != 0)
+		return (free(table), printf("Error: failed to create thread\n"),
+			EXIT_FAILURE);
+	//coordinate threads
+	//there should be no threads running by the time coordiate returns;
+	pthread_join(arg.thread, NULL);
 	free(table);
 	return (EXIT_SUCCESS);
 }

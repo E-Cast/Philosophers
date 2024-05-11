@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/10 22:21:23 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/11 00:31:05 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@
 # include <string.h>
 # include <sys/time.h>
 # include <stdbool.h>//
-# include <stdlib.h> //
-# include <stdio.h> //
+# include <stdlib.h>//
+# include <stdio.h>//
+# include <unistd.h>//
 
 /*default parameters*/
 
@@ -148,12 +149,14 @@ typedef struct s_table
 
 typedef struct s_monitor
 {
+	pthread_t	thread;
 	t_table		*table;
 	t_params	params;
 }	t_monitor;
 
 /*init.c*/
 
+int		make_philo(t_table **table, t_params params, int index);
 int		init_table(t_table **table, t_params params);
 
 /*params.c*/

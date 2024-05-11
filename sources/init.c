@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 09:45:07 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/10 22:32:03 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/11 00:36:40 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	make_philo(t_table **table, t_params params, int index)
 	philo.can_eat = &(*table)[index].can_eat;
 	philo.eating = &(*table)[index].eating;
 	philo.dead = &(*table)[index].dead;
+	(*table)[index].philo = philo;
 	return (EXIT_SUCCESS);
 }
 
