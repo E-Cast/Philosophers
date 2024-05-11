@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/11 14:25:25 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/11 14:59:31 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ typedef struct s_supervisor_shared
 	t_time			time_last_eaten;
 	bool			eating;//
 	bool			alive;
+
 }	t_super;
 
 typedef struct s_philosopher_shared
@@ -133,13 +134,13 @@ typedef struct s_philosopher_shared
 	bool			eating;
 	bool			alive;
 
-	t_super			*super;
+	t_super			super;
 	// pthread_t		s_thread;
 }	t_philo;
 
 typedef struct s_table
 {
-	t_philo			*philo;
+	t_philo			philo;
 	pthread_mutex_t	fork;
 	pthread_t		thread;
 	// pthread_mutex_t	lock;
@@ -149,17 +150,10 @@ typedef struct s_table
 	// bool			dead;
 }	t_table;
 
-// typedef struct s_monitor
-// {
-// 	pthread_t	thread;
-// 	t_table		*table;
-// 	t_params	params;
-// }	t_monitor;
-
 /*init.c*/
 
-int		make_philo(t_table **table, t_params params, int index);
-int		init_table(t_table **table, t_params params);
+int		make_philo(t_table *table, t_params params, int index);
+int		init_table(t_table *table, t_params params);
 
 /*params.c*/
 

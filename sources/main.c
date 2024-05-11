@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:48 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/11 14:33:26 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/11 15:09:33 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,17 +175,15 @@ void	*supervisor(void *arg)
 	{
 		pthread_mutex_lock(&super->lock);
 		time_last_eaten = super->time_last_eaten;
-		// pthread_mutex_unlock(&super->lock);
 		gettimeofday(&time, NULL);
 		if (time.tv_usec - time_last_eaten.tv_usec >= super->params.time_to_die)
 		{
 			printf("%li %i died\n", time.tv_usec, super->id);
-			// pthread_mutex_lock(&super->lock);
 			super->alive = false;
-			// pthread_mutex_unlock(&super->lock);
+			pthread_mutex_unlock(&super->lock);
 			break ;
 		}
-		pthread_mutex_unlock(&super->lock);//
+		pthread_mutex_unlock(&super->lock);
 	}
 	return (arg);
 }
@@ -198,18 +196,18 @@ void	*dine(void *arg)
 	bool		alive;
 
 	philo = (t_philo *)arg;
-	pthread_mutex_lock(&philo->super->lock);
+	pthread_mutex_lock(&philo->super.lock);
 	gettimeofday(&time, NULL);
-	philo->super->time_last_eaten = time;
-	pthread_mutex_unlock(&philo->super->lock);
+	philo->super.time_last_eaten = time;
+	pthread_mutex_unlock(&philo->super.lock);
 	printf("%li %i is thinking\n", time.tv_usec, philo->id);
-	if (pthread_create(&thread, NULL, supervisor, philo->super) != 0)//
+	if (pthread_create(&thread, NULL, supervisor, &philo->super) != 0)//
 		return (NULL);
 	while (true)
 	{
-		pthread_mutex_lock(&philo->super->lock);
-		alive = philo->super->alive;
-		pthread_mutex_unlock(&philo->super->lock);
+		pthread_mutex_lock(&philo->super.lock);
+		alive = philo->super.alive;
+		pthread_mutex_unlock(&philo->super.lock);
 		if (alive == false)
 			break ;
 	}
@@ -225,7 +223,7 @@ void	*start_philos(void *arg)
 	int			jndex;
 
 	table = (t_table *)arg;
-	params = table[0].philo->params;
+	params = table[0].philo.params;
 	index = 0;
 	while (index < params.philo_count)
 	{
@@ -249,8 +247,12 @@ int	main(int argc, char **argv)
 
 	if (set_params(&params, argc, argv) != 0)
 		return (EXIT_FAILURE);
-	if (init_table(&table, params) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
+	table = malloc((params.philo_count + 1) * sizeof(t_table));
+	if (!table)
+		return (printf("Error: failed to alloc memory\n"), EXIT_FAILURE);
+	if (init_table(table, params) == EXIT_FAILURE)
+		return (free(table), EXIT_FAILURE);
+
 	if (pthread_create(&thread, NULL, start_philos, (void *)table) != 0)
 		return (free(table), printf("Error: failed to create thread\n"),
 			EXIT_FAILURE);
