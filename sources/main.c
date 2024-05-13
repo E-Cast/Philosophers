@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:48 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/11 15:09:33 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/12 22:44:20 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,9 +181,23 @@ void	*supervisor(void *arg)
 			printf("%li %i died\n", time.tv_usec, super->id);
 			super->alive = false;
 			pthread_mutex_unlock(&super->lock);
+			pthread_mutex_lock(super->stop_lock);
+			*super->stop = true;
+			pthread_mutex_unlock(super->stop_lock);
 			break ;
 		}
 		pthread_mutex_unlock(&super->lock);
+		pthread_mutex_lock(super->stop_lock);
+		if (*super->stop == true)
+		{
+			pthread_mutex_unlock(super->stop_lock);
+			pthread_mutex_lock(&super->lock);
+			super->alive = false;
+			pthread_mutex_unlock(&super->lock);
+			break ;
+		}
+		else
+			pthread_mutex_unlock(super->stop_lock);
 	}
 	return (arg);
 }
@@ -206,8 +220,13 @@ void	*dine(void *arg)
 	while (true)
 	{
 		pthread_mutex_lock(&philo->super.lock);
-		alive = philo->super.alive;
+		if (philo->super.alive == false)
+			alive = false;
 		pthread_mutex_unlock(&philo->super.lock);
+		pthread_mutex_lock(&philo->lock);
+		if (philo->alive == false)
+			alive = false;
+		pthread_mutex_unlock(&philo->lock);
 		if (alive == false)
 			break ;
 	}
@@ -242,23 +261,25 @@ void	*start_philos(void *arg)
 int	main(int argc, char **argv)
 {
 	t_params	params;
+	t_data		*data;
 	t_table		*table;
-	pthread_t	thread;
 
 	if (set_params(&params, argc, argv) != 0)
 		return (EXIT_FAILURE);
-	table = malloc((params.philo_count + 1) * sizeof(t_table));
-	if (!table)
+	data = malloc(1 * sizeof(t_data));
+	if (!data)
 		return (printf("Error: failed to alloc memory\n"), EXIT_FAILURE);
-	if (init_table(table, params) == EXIT_FAILURE)
-		return (free(table), EXIT_FAILURE);
-
-	if (pthread_create(&thread, NULL, start_philos, (void *)table) != 0)
+	// data->table = malloc((params.philo_count + 1) * sizeof(t_table));
+	// if (data->table)
+	// 	return (printf("Error: failed to alloc memory\n"), EXIT_FAILURE);
+	if (init_table(data, params) == EXIT_FAILURE)
+		return (free(data), EXIT_FAILURE);
+	if (pthread_create(&data->thread, NULL, start_philos, (void *)data) != 0)
 		return (free(table), printf("Error: failed to create thread\n"),
 			EXIT_FAILURE);
 	//coordinate threads
 	//there should be no threads running by the time coordiate returns;
-	pthread_join(thread, NULL);
+	pthread_join(data->thread, NULL);
 	free(table);
 	return (EXIT_SUCCESS);
 }

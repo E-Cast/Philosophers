@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/11 14:59:31 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/12 22:38:03 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ typedef struct s_supervisor_shared
 	bool			eating;//
 	bool			alive;
 
+	pthread_mutex_t	*stop_lock;
+	bool			*stop;
 }	t_super;
 
 typedef struct s_philosopher_shared
@@ -149,6 +151,20 @@ typedef struct s_table
 	// bool			eating;
 	// bool			dead;
 }	t_table;
+
+typedef struct s_program_data
+{
+	// t_philo			*philo;
+	// pthread_mutex_t	*fork;
+	// pthread_t		thread;
+	t_table			*table;
+
+	t_params		params;
+	pthread_t		thread;
+
+	pthread_mutex_t	stop_lock;
+	bool			stop;
+}	t_data;
 
 /*init.c*/
 

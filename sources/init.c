@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 09:45:07 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/11 14:52:51 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/12 22:31:55 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,36 @@ int	make_philo(t_table *table, t_params params, int index)
 	philo->can_eat = false;
 	philo->eating = false;
 	philo->alive = true;
+	return (EXIT_SUCCESS);
+}
+
+int	make_super(t_philo *philo, t_params params, pthread_mutex_t *stop_lock, bool *stop)
+{
 	philo->super.params = params;
-	philo->super.id = index +1;
+	philo->super.id = philo->id;
 	if (pthread_mutex_init(&philo->super.lock, NULL) != 0)
 		return (printf("Error: failed to init mutex\n"), EXIT_FAILURE);//
 	philo->super.time_last_eaten = (t_time){.tv_sec = 0, .tv_usec = 0};
 	philo->super.eating = false;
 	philo->super.alive = true;
+	if (pthread_mutex_init(&philo->super.lock, NULL) != 0)
+		return (printf("Error: failed to init mutex\n"), EXIT_FAILURE);//
+	philo->super.stop_lock = stop_lock;
+	philo->super.stop = stop;
 	return (EXIT_SUCCESS);
 }
 
 int	init_table(t_table *table, t_params params)
 {
-	int		index;
+	int				index;
+	pthread_mutex_t	stop_lock;
+	bool			*stop;
 
 	memset(table, 0, params.philo_count + 1);
+	if (pthread_mutex_init(&stop_lock, NULL) != 0)
+		return (printf("Error: failed to init mutex\n"), EXIT_FAILURE);//
+	stop = malloc(1 * sizeof(bool));
+	*stop = false;
 	index = 0;
 	while (index < params.philo_count)
 	{
@@ -60,6 +75,8 @@ int	init_table(t_table *table, t_params params)
 			return (printf("Error: failed to init mutex\n"),
 				EXIT_FAILURE);
 		if (make_philo(table, params, index) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
+		if (make_super(&table[index].philo, params, &stop_lock, stop) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		index++;
 	}
