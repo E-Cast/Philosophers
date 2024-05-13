@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:48 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/12 23:01:51 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/12 23:19:47 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,138 +32,6 @@
 //terminate
 	//...
 
-
-// typedef struct s_table
-// {
-// 	int				*times_eaten;
-
-// 	pthread_mutex_t	*forks;
-// 	t_philo			*philos;
-// 	pthread_mutex_t	*info_lock;
-// 	bool			*can_eat;
-// 	bool			*dead;
-// 	pthread_t		*threads;
-// }	t_table;
-
-// void	*supervisor(void *param)
-// {
-// 	t_philo	*p;
-
-// 	p = (t_philo *)param;
-// 	while (true)
-// 	{
-		
-// 	}
-// }
-
-// void	*routine(void *param)
-// {
-// 	t_philo	*p;
-// 	t_state	state;
-// 	t_time	time;
-// 	int		times_eaten;
-
-// 	p = (t_philo *)param;
-// 	state = THINKING;
-// 	gettimeofday(&p->time_last_eaten, NULL);
-// 	printf("%li %i is thinking\n", p->time_last_eaten.tv_usec, p->id);
-// 	times_eaten = 0;
-// 	while (*p->dead == false)
-// 	{
-// 		if (state != THINKING)
-// 		{
-// 			state = THINKING;
-// 			gettimeofday(&time, NULL);
-// 			printf("%li %i is thinking\n", time.tv_usec, p->id);
-// 		}
-// 		if (*p->dead == false && state == THINKING && *p->can_eat == true && p->fork_l)
-// 		{
-// 			pthread_mutex_lock(p->fork_l);
-// 			gettimeofday(&time, NULL);
-// 			printf("%li %i has taken a fork\n", time.tv_usec, p->id);
-// 			pthread_mutex_lock(p->fork_r);
-// 			gettimeofday(&time, NULL);
-// 			printf("%li %i has taken a fork\n", time.tv_usec, p->id);
-// 			gettimeofday(&time, NULL);//
-// 			printf("%li %i is eating\n", time.tv_usec, p->id);
-// 			state = EATING;
-// 			p->time_last_eaten = time;
-// 			times_eaten++;
-// 			usleep(p->params.time_to_eat);
-// 		}
-// 		if (*p->dead == false && state == EATING)
-// 		{
-// 			state = SLEEPING;
-// 			gettimeofday(&time, NULL);//
-// 			printf("%li %i is sleeping\n", time.tv_usec, p->id);
-// 			usleep(p->params.time_to_sleep);
-// 		}
-// 	}
-// 	return (NULL);
-// }
-
-// void	monitor_deaths(t_table *table, int philo_count, int time_to_die)
-// {
-// 	int		index;
-// 	t_time	time;
-// 	t_philo	p;
-
-// 	index = 0;
-// 	while (index < philo_count)
-// 	{
-// 		p = table->philos[index];
-// 		gettimeofday(&time, NULL);
-// 		if (table->dead[index] == false && p.time_last_eaten.tv_usec - time.tv_usec >= time_to_die)
-// 		{
-// 			table->dead[index] = true;
-// 			printf("%i %i died\n", time.tv_usec, p.id);
-// 			printf("index:%i id:%i\n", index, p.id);
-// 		}
-// 		index++;
-// 	}
-// }
-
-// int	monitor(t_table *table, t_params params)
-// {
-// 	int	index;
-
-// 	while (true)
-// 	{
-// 		monitor_deaths(table, params.philo_count, params.time_to_die);
-// 		index = 0;
-
-// 	}
-// }
-
-// void	*monitor(void *args)
-// {
-// 	t_params	params;
-// 	t_table		*table;
-// 	int			index;
-
-// 	params = ((t_monitor *)args)->params;
-// 	table = ((t_monitor *)args)->table;
-// 	printf("philo_count:%i\n", params.philo_count);
-// 	while (true)
-// 	{
-// 		index = 0;
-// 	}
-// 	(void) index;
-// 	(void) table;
-// 	(void) params;
-// }
-
-// int	thread_create(pthread_t *t, pthread_attr_t *t_a, void *(* routine)(void *), void *arg)
-// {
-// 	(void) t;
-// 	(void) t_a;
-// 	(void) routine;
-// 	(void) arg;
-// 	return (1);
-// }
-
-// pthread_mutex_lock(&super->lock);
-// pthread_mutex_unlock(&super->lock);
 void	*supervisor(void *arg)
 {
 	t_super		*super;
@@ -210,23 +78,34 @@ void	*dine(void *arg)
 	bool		alive;
 
 	philo = (t_philo *)arg;
-	pthread_mutex_lock(&philo->super.lock);
-	gettimeofday(&time, NULL);
-	philo->super.time_last_eaten = time;
-	pthread_mutex_unlock(&philo->super.lock);
-	printf("%li %i is thinking\n", time.tv_usec, philo->id);
-	if (pthread_create(&thread, NULL, supervisor, &philo->super) != 0)//
-		return (NULL);
-	while (true)
+	alive = true;
+	pthread_mutex_lock(philo->super.stop_lock);
+	if (*philo->super.stop == true)
+		alive = false;
+	pthread_mutex_unlock(philo->super.stop_lock);
+	if (alive)
+	{
+		pthread_mutex_lock(&philo->super.lock);
+		gettimeofday(&time, NULL);
+		philo->super.time_last_eaten = time;
+		pthread_mutex_unlock(&philo->super.lock);
+		printf("%li %i is thinking\n", time.tv_usec, philo->id);
+		if (pthread_create(&thread, NULL, supervisor, &philo->super) != 0)//
+			return (NULL);
+	}
+	// pthread_mutex_lock(&philo->super.lock);
+	// gettimeofday(&time, NULL);
+	// philo->super.time_last_eaten = time;
+	// pthread_mutex_unlock(&philo->super.lock);
+	// printf("%li %i is thinking\n", time.tv_usec, philo->id);
+	// if (pthread_create(&thread, NULL, supervisor, &philo->super) != 0)//
+	// 	return (NULL);
+	while (alive)
 	{
 		pthread_mutex_lock(&philo->super.lock);
 		if (philo->super.alive == false)
 			alive = false;
 		pthread_mutex_unlock(&philo->super.lock);
-		pthread_mutex_lock(&philo->lock);
-		if (philo->alive == false)
-			alive = false;
-		pthread_mutex_unlock(&philo->lock);
 		if (alive == false)
 			break ;
 	}
@@ -246,7 +125,7 @@ void	*start_philos(void *arg)
 	{
 		usleep(1);//
 		if (pthread_create(&data->table[index].thread, NULL, dine,
-			(void *)&data->table[index].philo) != 0)//
+				(void *)&data->table[index].philo) != 0)
 			break ;
 		index++;
 	}

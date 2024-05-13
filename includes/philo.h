@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/12 22:59:40 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/12 23:24:46 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,75 +58,25 @@ typedef struct s_parameters
 
 typedef struct timeval	t_time;
 
-
-
-
-
-// typedef enum e_state
-// {
-// 	EATING,
-// 	SLEEPING,
-// 	THINKING
-// }	t_state;
-
-// typedef struct s_philosopher
-// {
-// 	t_params		params;
-
-// 	int				id;
-// 	bool			*can_eat;
-// 	bool			*dead;
-// 	// t_state			state;
-// 	t_time			time_last_eaten;
-// 	// int				times_eaten;
-// 	pthread_mutex_t	*fork_r;
-// 	pthread_mutex_t	*fork_l;
-// 	// pthread_mutex_t	*info_lock;
-// }	t_philo;
-
-// typedef struct s_table
-// {
-// 	// int				*times_eaten;
-// 	pthread_mutex_t	*forks;
-// 	t_philo			*philos;
-// 	// pthread_mutex_t	*info_lock;
-// 	bool			*can_eat;
-// 	bool			*dead;
-// 	pthread_t		*threads;
-// }	t_table;
-
-// // typedef struct s_philosopher
-// // {
-// // 	unsigned int	id;
-// // 	pthread_t		*thread;
-// 	// pthread_mutex_t	*r_fork;
-// 	// pthread_mutex_t	*l_fork;
-// // 	pthread_mutex_t	*state;
-// // 	unsigned int	times_eaten;
-// // 	unsigned int	time_last_eaten;
-
-// // 	t_params		params;
-// // }	t_philo;
-
-// void	*routine(void *param);
 typedef struct s_supervisor_shared
 {
 	t_params		params;
 	int				id;
+	pthread_mutex_t	*stop_lock;
+	bool			*stop;
 
 	pthread_mutex_t	lock;
 	t_time			time_last_eaten;
 	bool			eating;//
 	bool			alive;
-
-	pthread_mutex_t	*stop_lock;
-	bool			*stop;
 }	t_super;
 
 typedef struct s_philosopher_shared
 {
 	t_params		params;
 	int				id;
+	pthread_mutex_t	*stop_lock;
+	bool			*stop;
 
 	pthread_mutex_t	*fork_l;
 	pthread_mutex_t	*fork_r;
@@ -137,7 +87,6 @@ typedef struct s_philosopher_shared
 	bool			alive;
 
 	t_super			super;
-	// pthread_t		s_thread;
 }	t_philo;
 
 typedef struct s_table
@@ -149,9 +98,6 @@ typedef struct s_table
 
 typedef struct s_program_data
 {
-	// t_philo			*philo;
-	// pthread_mutex_t	*fork;
-	// pthread_t		thread;
 	t_table			*table;
 
 	t_params		params;

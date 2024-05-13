@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 09:45:07 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/12 22:58:24 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/12 23:32:05 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,12 @@ int	make_philo(t_data *data, t_params params, int index)
 	else
 		philo->fork_r = &data->table[index].fork;
 	if (pthread_mutex_init(&philo->lock, NULL) != 0)
-		return (printf("Error: failed to init mutex\n"), EXIT_FAILURE);//
+		return (printf("Error: failed to init mutex\n"), EXIT_FAILURE);
 	philo->can_eat = false;
 	philo->eating = false;
 	philo->alive = true;
+	philo->stop_lock = &data->stop_lock;
+	philo->stop = &data->stop;
 	return (EXIT_SUCCESS);
 }
 
@@ -49,12 +51,10 @@ int	make_super(t_data *data, int index, t_params params)
 	philo->super.params = params;
 	philo->super.id = philo->id;
 	if (pthread_mutex_init(&philo->super.lock, NULL) != 0)
-		return (printf("Error: failed to init mutex\n"), EXIT_FAILURE);//
+		return (printf("Error: failed to init mutex\n"), EXIT_FAILURE);
 	philo->super.time_last_eaten = (t_time){.tv_sec = 0, .tv_usec = 0};
 	philo->super.eating = false;
 	philo->super.alive = true;
-	if (pthread_mutex_init(&philo->super.lock, NULL) != 0)
-		return (printf("Error: failed to init mutex\n"), EXIT_FAILURE);//
 	philo->super.stop_lock = &data->stop_lock;
 	philo->super.stop = &data->stop;
 	return (EXIT_SUCCESS);
