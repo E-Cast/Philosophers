@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/12 22:38:03 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/12 22:59:40 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,11 +145,6 @@ typedef struct s_table
 	t_philo			philo;
 	pthread_mutex_t	fork;
 	pthread_t		thread;
-	// pthread_mutex_t	lock;
-	// t_time			time_last_eaten;
-	// bool			can_eat;
-	// bool			eating;
-	// bool			dead;
 }	t_table;
 
 typedef struct s_program_data
@@ -168,14 +163,15 @@ typedef struct s_program_data
 
 /*init.c*/
 
-int		make_philo(t_table *table, t_params params, int index);
-int		init_table(t_table *table, t_params params);
+int	make_philo(t_data *data, t_params params, int index);
+int	make_super(t_data *data, int index, t_params params);
+int	init_table(t_data *data, t_params params);
 
 /*params.c*/
 
-int		check_arg_count(int argc);
-int		ft_atoi(const char *str);
-int		check_params(t_params *p, int argc);
-int		set_params(t_params *params, int argc, char **argv);
+int	check_arg_count(int argc);
+int	ft_atoi(const char *str);
+int	check_params(t_params *p, int argc);
+int	set_params(t_params *params, int argc, char **argv);
 
 #endif
