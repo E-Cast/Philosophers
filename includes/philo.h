@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/14 14:49:19 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/14 15:22:54 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,13 @@ typedef struct s_supervisor_shared
 	bool			alive;
 }	t_super;
 
+// typedef enum s_state
+// {
+// 	THINKING,
+// 	EATING,
+// 	SLEEPING
+// }	t_state;
+
 typedef struct s_philosopher_shared
 {
 	t_params		params;
@@ -122,7 +129,9 @@ int		set_params(t_params *params, int argc, char **argv);
 
 /*philo.c*/
 
-void	*dine(void *arg);
+void	print_action(t_philo *philo, suseconds_t time, char *action);
+void	dine(t_philo *philo);
+void	*philo_start(void *arg);
 
 /*supervisor.c*/
 

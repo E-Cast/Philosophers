@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:48 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/14 14:35:19 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/14 15:28:45 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*start_philos(void *arg)
 	index = 0;
 	while (index < data->params.philo_count)
 	{
-		if (pthread_create(&data->table[index].thread, NULL, dine,
+		if (pthread_create(&data->table[index].thread, NULL, philo_start,
 				(void *)&data->table[index].philo) != 0)
 			break ;
 		index++;
@@ -32,6 +32,16 @@ void	*start_philos(void *arg)
 	while (jndex < index)
 		pthread_join(data->table[jndex++].thread, NULL);
 	return (data);
+}
+
+void	monitor(t_table *table)
+{
+	t_philo	philo;
+
+	philo = table[0].philo;
+	pthread_mutex_lock(&philo.lock);
+	philo.can_eat = true;
+	pthread_mutex_unlock(&philo.lock);
 }
 
 int	main(int argc, char **argv)
@@ -49,6 +59,10 @@ int	main(int argc, char **argv)
 		return (printf("Error: failed to create thread\n"),
 			free(data->table), free(data), EXIT_FAILURE);
 	//coordinate threads
+	monitor(data->table);
+	// pthread_mutex_lock(&data->table->philo.lock);
+	// data->table[0].philo.can_eat = true;
+	// pthread_mutex_unlock(&data->table->philo.lock);
 	//there should be no threads running by the time coordiate returns;
 	pthread_join(data->thread, NULL);
 	return (free(data->table), free(data), EXIT_SUCCESS);
