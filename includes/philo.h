@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/14 14:35:16 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/14 14:49:19 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,11 @@ int		set_params(t_params *params, int argc, char **argv);
 
 /*philo.c*/
 
-void	*supervisor(void *arg);
 void	*dine(void *arg);
+
+/*supervisor.c*/
+
+void	kill_philo(t_super *super, t_time time);
+void	*supervisor(void *arg);
 
 #endif

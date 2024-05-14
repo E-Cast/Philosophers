@@ -6,49 +6,11 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:34:09 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/14 14:34:20 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/14 14:48:52 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	*supervisor(void *arg)
-{
-	t_super		*super;
-	t_time		time;
-	t_time		time_last_eaten;
-
-	super = (t_super *)arg;
-	while (true)
-	{
-		pthread_mutex_lock(&super->lock);
-		time_last_eaten = super->time_last_eaten;
-		gettimeofday(&time, NULL);
-		if (time.tv_usec - time_last_eaten.tv_usec >= super->params.time_to_die)
-		{
-			printf("%li %i died\n", time.tv_usec, super->id);
-			super->alive = false;
-			pthread_mutex_unlock(&super->lock);
-			pthread_mutex_lock(super->stop_lock);
-			*super->stop = true;
-			pthread_mutex_unlock(super->stop_lock);
-			break ;
-		}
-		pthread_mutex_unlock(&super->lock);
-		pthread_mutex_lock(super->stop_lock);
-		if (*super->stop == true)
-		{
-			pthread_mutex_unlock(super->stop_lock);
-			pthread_mutex_lock(&super->lock);
-			super->alive = false;
-			pthread_mutex_unlock(&super->lock);
-			break ;
-		}
-		else
-			pthread_mutex_unlock(super->stop_lock);
-	}
-	return (arg);
-}
 
 void	*dine(void *arg)
 {
