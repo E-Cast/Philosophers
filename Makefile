@@ -1,6 +1,7 @@
 SRC				=	init.c \
 					main.c \
 					params.c \
+					philo.c
 
 SRC_DIR			:=	sources/
 OBJ_DIR			:=	objects/

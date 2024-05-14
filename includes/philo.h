@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/12 23:24:46 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/14 14:35:16 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,15 +109,20 @@ typedef struct s_program_data
 
 /*init.c*/
 
-int	make_philo(t_data *data, t_params params, int index);
-int	make_super(t_data *data, int index, t_params params);
-int	init_table(t_data *data, t_params params);
+int		make_philo(t_data *data, t_params params, int index);
+int		make_super(t_data *data, int index, t_params params);
+int		init_table(t_data *data, t_params params);
 
 /*params.c*/
 
-int	check_arg_count(int argc);
-int	ft_atoi(const char *str);
-int	check_params(t_params *p, int argc);
-int	set_params(t_params *params, int argc, char **argv);
+int		check_arg_count(int argc);
+int		ft_atoi(const char *str);
+int		check_params(t_params *p, int argc);
+int		set_params(t_params *params, int argc, char **argv);
+
+/*philo.c*/
+
+void	*supervisor(void *arg);
+void	*dine(void *arg);
 
 #endif
