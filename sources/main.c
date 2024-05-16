@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:03:02 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 19:13:46 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 19:18:29 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 	PHILO
 		init:
 			launch supervisor thread.
+			get current time.
+			update time_last_eaten for SUPER.
+			update time_last_eaten for MONITOR.
 			...
 		dine:
 			while (alive):
@@ -58,10 +61,26 @@
 				LOG_MSG.
 				set philo as dead.
 				set program to stop.
+				return.
 			else if (program set to stop):
 				set philo as dead.
+				return.
 
-
+	MONITOR
+		while (true)
+			if (stop == true):
+				unlock all can_eat mutexes.
+				return.
+			get time_last_eaten for every philo
+			find which philo to make eat:
+				...
+			unlock can_eat mutexes for relevant philos
+			...
+			wait for fraction of EAT_TIME (one half or one fourth)
+			if (stop == true):
+				unlock all can_eat mutexes.
+				return.
+			lock every can_eat mutexes
 		
 1) find out which philo to make eat and unlock their eat mutexes
 2) wait for half the eating time
@@ -72,10 +91,6 @@ meanwhile for the philo
 2) eat (lock the forks, update time last eaten, sleep for eat time, unlock forks and eat mutex)
 3) sleep (sleep for sleep time)
 4) loop
-	MONITOR
-		get time last eaten for all
-		unlock eat mutexes for the ones that need it the most
-		How and when do I re lock the mutexes?
 */
 
 void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char msg)
