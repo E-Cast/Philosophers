@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/14 18:01:32 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 19:12:19 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,25 @@ int		ft_atoi(const char *str);
 int		check_params(t_params *p, int argc);
 int		set_params(t_params *params, int argc, char **argv);
 
-/*log.c*/
+/*structs*/
 
-void	log_think(pthread_mutex_t *lock, bool *stop, suseconds_t time, int id);
-void	log_fork(pthread_mutex_t *lock, bool *stop, suseconds_t time, int id);
-void	log_eat(pthread_mutex_t *lock, bool *stop, suseconds_t time, int id);
-void	log_sleep(pthread_mutex_t *lock, bool *stop, suseconds_t time, int id);
-void	log_die(pthread_mutex_t *lock, bool *stop, suseconds_t time, int id);
+typedef struct timeval	t_time;
+
+typedef struct s_data
+{
+	t_params		params;
+
+	int				*threads;
+	// t_philo			*philo;
+	pthread_mutex_t	*can_eat;
+	pthread_mutex_t	*forks;
+
+	pthread_mutex_t	stop_lock;
+	bool			stop;
+}	t_data;
+
+/*main*/
+
+void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char msg);
 
 #endif
