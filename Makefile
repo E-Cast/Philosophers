@@ -1,6 +1,6 @@
-SRC				=	log.c \
-					main.c \
-					params.c
+SRC				=	main.c \
+					params.c \
+					table.c
 
 SRC_DIR			:=	sources/
 OBJ_DIR			:=	objects/

@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:03:02 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 19:18:29 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 19:51:00 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,14 +102,18 @@ void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char msg)
 		return (pthread_mutex_unlock(lock), (void) 0);
 	pthread_mutex_unlock(lock);
 	gettimeofday(&time, NULL);
-	printf("%li %i %i\n", time, id, msg);
+	printf("%li %i %i\n", time.tv_usec, id, msg);
 }
 
 int	main(int argc, char **argv)
 {
 	t_params	params;
+	t_table		*table;
 
 	if (set_params(&params, argc, argv) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	table = make_table(params);
+	if (!table)
 		return (EXIT_FAILURE);
 	//alloc and init the structs and mutexes
 	//launch threads

@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 19:12:19 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 19:51:02 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,21 +67,29 @@ int		set_params(t_params *params, int argc, char **argv);
 
 typedef struct timeval	t_time;
 
-typedef struct s_data
+typedef struct s_philosopher_data
 {
-	t_params		params;
 
-	int				*threads;
-	// t_philo			*philo;
+}	t_philo;
+
+typedef struct s_table
+{
+	// t_params		params;
+
+	t_philo			*philo;
 	pthread_mutex_t	*can_eat;
 	pthread_mutex_t	*forks;
 
 	pthread_mutex_t	stop_lock;
 	bool			stop;
-}	t_data;
+}	t_table;
 
-/*main*/
+
+
+
+/*tmp*/
 
 void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char msg);
+t_table	*make_table(t_params params);
 
 #endif
