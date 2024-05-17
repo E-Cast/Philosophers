@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:03:02 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 20:00:40 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:21:10 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,14 @@ void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char msg)
 	pthread_mutex_unlock(lock);
 	gettimeofday(&time, NULL);
 	printf("%li %i %i\n", time.tv_usec, id, msg);
+}
+
+int	make_philo(t_table *table, t_params params, int index)
+{
+	return (EXIT_SUCCESS);
+	(void) table;
+	(void) params;
+	(void) index;
 }
 
 int	main(int argc, char **argv)

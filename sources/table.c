@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:34:09 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 20:15:42 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:21:03 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,6 @@
 // 	(void) a;
 // }
 
-void	free_table(t_table *table)
-{
-	free(table->philo);
-	free(table->can_eat);
-	free(table->forks);
-	free(table);
-}
-
 void	*ph_calloc(size_t count, size_t size)
 {
 	unsigned char	*ptr;
@@ -43,14 +35,6 @@ void	*ph_calloc(size_t count, size_t size)
 		return (NULL);
 	memset(ptr, 0, count * size);
 	return ((void *)ptr);
-}
-
-int	make_philo(t_table *table, t_params params, int index)
-{
-	return (EXIT_SUCCESS);
-	(void) table;
-	(void) params;
-	(void) index;
 }
 
 int	make_arrays(t_table *table, t_params params)

@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 20:16:03 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:25:11 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,18 @@ int		set_params(t_params *params, int argc, char **argv);
 
 typedef struct timeval	t_time;
 
+typedef struct s_supervisor_data
+{
+	t_params		params;
+	int				id;
+	pthread_mutex_t	*stop_lock;
+	bool			*stop;
+
+	pthread_mutex_t	sp_lock;
+	bool			sp_alive;
+	t_time			sp_t_last_ate;
+}	t_super;
+
 typedef struct s_philosopher_data
 {
 	t_params		params;
@@ -78,8 +90,11 @@ typedef struct s_philosopher_data
 	pthread_mutex_t	*fork_r;
 	pthread_mutex_t	*fork_l;
 
-	pthread_mutex_t	lock;
-	t_time			time_last_eaten;
+	pthread_mutex_t	mp_lock;
+	bool			mp_alive;
+	t_time			mp_t_last_ate;
+
+	t_super			super;
 }	t_philo;
 
 typedef struct s_table
@@ -100,5 +115,6 @@ typedef struct s_table
 
 void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char msg);
 t_table	*make_table(t_params params);
+int		make_philo(t_table *table, t_params params, int index);
 
 #endif
