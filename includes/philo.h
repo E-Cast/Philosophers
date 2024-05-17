@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 20:43:19 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:47:12 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ typedef struct s_table
 
 /*table.c*/
 
+int		make_super(t_philo *philo);
+int		make_philo(t_table *table, t_params params, int index);
 void	*ph_calloc(size_t count, size_t size);
 int		make_arrays(t_table *table, t_params params);
 t_table	*make_table(t_params params);

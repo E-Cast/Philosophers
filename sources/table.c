@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:34:09 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 20:46:22 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:49:35 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	*ph_calloc(size_t count, size_t size)
 
 	ptr = malloc(count * size);
 	if (!ptr)
-		return (NULL);
+		return (printf("Error: allocation failed\n"), NULL);
 	memset(ptr, 0, count * size);
 	return ((void *)ptr);
 }
@@ -120,7 +120,7 @@ t_table	*make_table(t_params params)
 	if (!table)
 		return (NULL);
 	if (pthread_mutex_init(&table->stop_lock, NULL) != 0)
-		return (free(table), NULL);
+		return (free(table), printf("Error: failed to alloc table\n"), NULL);
 	table->stop = false;
 	if (make_arrays(table, params) == EXIT_FAILURE)
 		return (free(table), printf("Error: failed to make arrays\n"), NULL);
