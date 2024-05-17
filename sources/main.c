@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:03:02 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/17 18:34:46 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/17 18:44:05 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,12 +131,12 @@ void	*philo(void *arg)
 int	launch_philos(t_table *table, t_params params)
 {
 	int	index;
-	int	jndex;
 
 	index = 0;
 	pthread_mutex_lock(&table->start_lock);
 	while (index < params.philo_count)
 	{
+
 		if (pthread_create(&table->philo[index].thread,
 				NULL, philo, &table->philo[index]) != 0)
 		{
@@ -148,24 +148,38 @@ int	launch_philos(t_table *table, t_params params)
 		index++;
 		usleep(1);
 	}
+	return (index);
+}
+
+void	monitor(t_table *table, t_params params)
+{
 	pthread_mutex_unlock(&table->start_lock);
-	jndex = 0;
-	while (jndex < index)
-		pthread_join(table->philo[jndex++].thread, NULL);
-	return (EXIT_SUCCESS);
+	printf("neat\n");
+	(void) params;
 }
 
 int	main(int argc, char **argv)
 {
 	t_params	params;
 	t_table		*table;
+	int			t_launched;
+	int			index;
 
 	if (set_params(&params, argc, argv) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	table = make_table(params);
 	if (!table)
 		return (printf("Error: failed to make table\n"), EXIT_FAILURE);
-	launch_philos(table, params);
+
+	t_launched = launch_philos(table, params);
+	if (t_launched == params.philo_count)
+		monitor(table, params);
+	else
+		pthread_mutex_unlock(&table->start_lock);
+
+	index = 0;
+	while (index < t_launched)
+		pthread_join(table->philo[index++].thread, NULL);
 	return (free(table->forks), free(table->can_eat), free(table->philo),
 		free(table), EXIT_SUCCESS);
 }
