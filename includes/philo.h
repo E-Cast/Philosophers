@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 20:27:09 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:43:19 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ typedef struct s_philosopher_data
 	pthread_mutex_t	*fork_l;
 
 	pthread_mutex_t	mp_lock;
-	bool			mp_alive;
+	// bool			mp_alive;
 	t_time			mp_t_last_ate;
 
 	t_super			super;
