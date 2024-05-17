@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 19:51:02 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:16:03 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,19 +69,28 @@ typedef struct timeval	t_time;
 
 typedef struct s_philosopher_data
 {
+	t_params		params;
+	int				id;
+	pthread_mutex_t	*stop_lock;
+	bool			*stop;
 
+	pthread_mutex_t	*can_eat;
+	pthread_mutex_t	*fork_r;
+	pthread_mutex_t	*fork_l;
+
+	pthread_mutex_t	lock;
+	t_time			time_last_eaten;
 }	t_philo;
 
 typedef struct s_table
 {
 	// t_params		params;
+	pthread_mutex_t	stop_lock;
+	bool			stop;
 
 	t_philo			*philo;
 	pthread_mutex_t	*can_eat;
 	pthread_mutex_t	*forks;
-
-	pthread_mutex_t	stop_lock;
-	bool			stop;
 }	t_table;
 
 

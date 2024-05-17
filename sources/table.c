@@ -6,24 +6,32 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:34:09 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 20:07:28 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:15:42 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*h_calloc(size_t count, size_t size)
-{
-	return (NULL);
-	(void) count;
-	(void) size;
-}
+// void	*h_calloc(size_t count, size_t size)
+// {
+// 	return (NULL);
+// 	(void) count;
+// 	(void) size;
+// }
 
-int	thread_mutex_init(pthread_mutex_t *m, pthread_mutexattr_t *a)
+// int	thread_mutex_init(pthread_mutex_t *m, pthread_mutexattr_t *a)
+// {
+// 	return (1);
+// 	(void) m;
+// 	(void) a;
+// }
+
+void	free_table(t_table *table)
 {
-	return (1);
-	(void) m;
-	(void) a;
+	free(table->philo);
+	free(table->can_eat);
+	free(table->forks);
+	free(table);
 }
 
 void	*ph_calloc(size_t count, size_t size)
@@ -81,7 +89,9 @@ t_table	*make_table(t_params params)
 	table = ph_calloc(1, sizeof(t_table));
 	if (!table)
 		return (printf("Error: failed to make table\n"), NULL);
-	// pthread
+	if (pthread_mutex_init(&table->stop_lock, NULL) != 0)
+		return (free(table), printf("Error: failed to make table\n"), NULL);
+	table->stop = false;
 	if (make_arrays(table, params) == EXIT_FAILURE)
 		return (free(table), printf("Error: failed to make arrays\n"), NULL);//
 	return (table);
