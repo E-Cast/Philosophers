@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 20:25:11 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:27:09 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,11 @@ typedef struct s_table
 	pthread_mutex_t	*forks;
 }	t_table;
 
+/*table.c*/
 
-
+void	*ph_calloc(size_t count, size_t size);
+int		make_arrays(t_table *table, t_params params);
+t_table	*make_table(t_params params);
 
 /*tmp*/
 

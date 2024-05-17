@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:03:02 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 20:21:10 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:40:17 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,14 +105,6 @@ void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char msg)
 	printf("%li %i %i\n", time.tv_usec, id, msg);
 }
 
-int	make_philo(t_table *table, t_params params, int index)
-{
-	return (EXIT_SUCCESS);
-	(void) table;
-	(void) params;
-	(void) index;
-}
-
 int	main(int argc, char **argv)
 {
 	t_params	params;
@@ -122,7 +114,7 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	table = make_table(params);
 	if (!table)
-		return (EXIT_FAILURE);
+		return (printf("Error: failed to make table\n"), EXIT_FAILURE);
 	//alloc and init the structs and mutexes
 	//launch threads
 	return (free(table->forks), free(table->can_eat), free(table->philo),

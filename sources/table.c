@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:34:09 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 20:21:03 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:40:52 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@
 // 	(void) size;
 // }
 
-// int	thread_mutex_init(pthread_mutex_t *m, pthread_mutexattr_t *a)
-// {
-// 	return (1);
-// 	(void) m;
-// 	(void) a;
-// }
+int	thread_mutex_init(pthread_mutex_t *m, pthread_mutexattr_t *a)
+{
+	return (1);
+	(void) m;
+	(void) a;
+}
 
 void	*ph_calloc(size_t count, size_t size)
 {
@@ -35,6 +35,38 @@ void	*ph_calloc(size_t count, size_t size)
 		return (NULL);
 	memset(ptr, 0, count * size);
 	return ((void *)ptr);
+}
+
+int	make_super(t_philo *philo)
+{
+	return (EXIT_SUCCESS);
+	(void) philo;
+}
+
+int	make_philo(t_table *table, t_params params, int index)
+{
+	t_philo	philo;
+
+	philo.params = params;
+	philo.id = index + 1;
+	philo.stop_lock = &table->stop_lock;
+	philo.stop = &table->stop;
+	philo.can_eat = &table->can_eat[index];
+	philo.fork_r = &table->forks[index];
+	if (params.philo_count == 1)
+		philo.fork_l = NULL;
+	else if (index + 1 == params.philo_count)
+		philo.fork_l = &table->forks[0];
+	else
+		philo.fork_l = &table->forks[index + 1];
+	if (pthread_mutex_init(&philo.mp_lock, NULL) != 0)
+		return (printf("Error: failed to make philo\n"), EXIT_FAILURE);
+	philo.mp_alive = true;
+	philo.mp_t_last_ate = (t_time){.tv_sec = 0, .tv_usec = 0};
+	if (make_super(&philo) == EXIT_FAILURE)
+		return (EXIT_FAILURE);//
+	table->philo[index] = philo;
+	return (EXIT_SUCCESS);
 }
 
 int	make_arrays(t_table *table, t_params params)
@@ -72,7 +104,7 @@ t_table	*make_table(t_params params)
 
 	table = ph_calloc(1, sizeof(t_table));
 	if (!table)
-		return (printf("Error: failed to make table\n"), NULL);
+		return (NULL);
 	if (pthread_mutex_init(&table->stop_lock, NULL) != 0)
 		return (free(table), printf("Error: failed to make table\n"), NULL);
 	table->stop = false;
