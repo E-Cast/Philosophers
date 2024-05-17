@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:03:02 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 19:51:00 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:00:40 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,6 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	//alloc and init the structs and mutexes
 	//launch threads
-	return (EXIT_SUCCESS);
+	return (free(table->forks), free(table->can_eat), free(table->philo),
+		free(table), EXIT_SUCCESS);
 }
