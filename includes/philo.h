@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 20:47:12 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/17 17:58:14 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,11 @@ typedef struct s_philosopher_data
 {
 	t_params		params;
 	int				id;
+	pthread_mutex_t	*start_lock;
 	pthread_mutex_t	*stop_lock;
 	bool			*stop;
 
+	pthread_t		thread;
 	pthread_mutex_t	*can_eat;
 	pthread_mutex_t	*fork_r;
 	pthread_mutex_t	*fork_l;
@@ -100,6 +102,7 @@ typedef struct s_philosopher_data
 typedef struct s_table
 {
 	// t_params		params;
+	pthread_mutex_t	start_lock;
 	pthread_mutex_t	stop_lock;
 	bool			stop;
 
@@ -118,7 +121,7 @@ t_table	*make_table(t_params params);
 
 /*tmp*/
 
-void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char msg);
+void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char *msg);
 t_table	*make_table(t_params params);
 int		make_philo(t_table *table, t_params params, int index);
 

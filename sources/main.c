@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:03:02 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 20:40:17 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/17 18:34:46 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,16 +93,66 @@ meanwhile for the philo
 4) loop
 */
 
-void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char msg)
+// int	thread_create(pthread_t *t, void *n, void *routine(void *), void *arg)
+// {
+// 	return (1);
+// 	(void) t;
+// 	(void) n;
+// 	(void) routine;
+// 	(void) arg;
+// }
+
+void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char *msg)
 {
 	t_time	time;
 
 	pthread_mutex_lock(lock);
 	if (*stop == true)
 		return (pthread_mutex_unlock(lock), (void) 0);
-	pthread_mutex_unlock(lock);
+	else
+		pthread_mutex_unlock(lock);
+	// (void) lock;
+	// (void) stop;
 	gettimeofday(&time, NULL);
-	printf("%li %i %i\n", time.tv_usec, id, msg);
+	printf("%li %i %s\n", time.tv_usec, id, msg);
+}
+
+void	*philo(void *arg)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	pthread_mutex_lock(philo->start_lock);
+	pthread_mutex_unlock(philo->start_lock);
+	log_msg(philo->stop_lock, philo->stop, philo->id, "is thinking");
+	return (NULL);
+}
+
+int	launch_philos(t_table *table, t_params params)
+{
+	int	index;
+	int	jndex;
+
+	index = 0;
+	pthread_mutex_lock(&table->start_lock);
+	while (index < params.philo_count)
+	{
+		if (pthread_create(&table->philo[index].thread,
+				NULL, philo, &table->philo[index]) != 0)
+		{
+			pthread_mutex_lock(&table->stop_lock);
+			table->stop = true;
+			pthread_mutex_unlock(&table->stop_lock);
+			break ;
+		}
+		index++;
+		usleep(1);
+	}
+	pthread_mutex_unlock(&table->start_lock);
+	jndex = 0;
+	while (jndex < index)
+		pthread_join(table->philo[jndex++].thread, NULL);
+	return (EXIT_SUCCESS);
 }
 
 int	main(int argc, char **argv)
@@ -115,8 +165,7 @@ int	main(int argc, char **argv)
 	table = make_table(params);
 	if (!table)
 		return (printf("Error: failed to make table\n"), EXIT_FAILURE);
-	//alloc and init the structs and mutexes
-	//launch threads
+	launch_philos(table, params);
 	return (free(table->forks), free(table->can_eat), free(table->philo),
 		free(table), EXIT_SUCCESS);
 }

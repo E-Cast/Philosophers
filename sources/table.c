@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:34:09 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/16 20:49:35 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/17 17:09:55 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int	make_philo(t_table *table, t_params params, int index)
 
 	philo.params = params;
 	philo.id = index + 1;
+	philo.start_lock = &table->start_lock;
 	philo.stop_lock = &table->stop_lock;
 	philo.stop = &table->stop;
 	philo.can_eat = &table->can_eat[index];
@@ -119,6 +120,8 @@ t_table	*make_table(t_params params)
 	table = ph_calloc(1, sizeof(t_table));
 	if (!table)
 		return (NULL);
+	if (pthread_mutex_init(&table->start_lock, NULL) != 0)
+		return (free(table), printf("Error: failed to alloc table\n"), NULL);
 	if (pthread_mutex_init(&table->stop_lock, NULL) != 0)
 		return (free(table), printf("Error: failed to alloc table\n"), NULL);
 	table->stop = false;
