@@ -9,7 +9,7 @@ OBJ				:=	$(subst $(SRC_DIR), $(OBJ_DIR), $(SRC:.c=.o))
 NAME			:=	philo
 
 # DEBUG			:=	-g 
-SANITIZE		:=	-fsanitize=thread
+SANITIZE		:=	-fsanitize=address
 CC				:=	gcc -Wall -Werror -Wextra -pthread $(SANITIZE) $(DEBUG)
 INC_DIR			:= 	includes
 INCLUDES		:=	-I $(INC_DIR)

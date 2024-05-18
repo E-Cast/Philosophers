@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:03:02 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/17 18:44:05 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/17 19:58:57 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void	*philo(void *arg)
 
 	philo = (t_philo *)arg;
 	pthread_mutex_lock(philo->start_lock);
+	usleep(1);
 	pthread_mutex_unlock(philo->start_lock);
 	log_msg(philo->stop_lock, philo->stop, philo->id, "is thinking");
 	return (NULL);
@@ -136,7 +137,6 @@ int	launch_philos(t_table *table, t_params params)
 	pthread_mutex_lock(&table->start_lock);
 	while (index < params.philo_count)
 	{
-
 		if (pthread_create(&table->philo[index].thread,
 				NULL, philo, &table->philo[index]) != 0)
 		{
@@ -153,6 +153,11 @@ int	launch_philos(t_table *table, t_params params)
 
 void	monitor(t_table *table, t_params params)
 {
+	int	index;
+
+	index = 0;
+	while (index < params.philo_count)
+		pthread_mutex_lock(&table->can_eat[index++]);
 	pthread_mutex_unlock(&table->start_lock);
 	printf("neat\n");
 	(void) params;
