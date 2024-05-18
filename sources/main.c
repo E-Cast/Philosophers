@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:03:02 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/18 01:48:43 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/18 02:35:40 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int	launch_philos(t_table *table, t_params params)
 			pthread_mutex_unlock(&table->stop_lock);
 			break ;
 		}
-		usleep(1);
+		usleep(10);
 		pthread_mutex_lock(&table->philo[index].mp_lock);
 		pthread_mutex_unlock(&table->philo[index].mp_lock);
 		index++;

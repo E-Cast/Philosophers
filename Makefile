@@ -1,6 +1,7 @@
 SRC				=	main.c \
 					params.c \
 					philo.c \
+					super.c \
 					table.c \
 					utils.c
 

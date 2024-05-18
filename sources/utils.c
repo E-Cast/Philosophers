@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 01:48:29 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/18 01:48:45 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/18 02:24:42 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,14 @@ void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char *msg)
 {
 	t_time	time;
 
-	pthread_mutex_lock(lock);
-	if (*stop == true)
-		return (pthread_mutex_unlock(lock), (void) 0);
-	else
-		pthread_mutex_unlock(lock);
+	if (lock && stop)
+	{
+		pthread_mutex_lock(lock);
+		if (*stop == true)
+			return (pthread_mutex_unlock(lock), (void) 0);
+		else
+			pthread_mutex_unlock(lock);
+	}
 	get_ms_time(&time);
 	printf("%li %i %s\n", time.ms, id, msg);
 }

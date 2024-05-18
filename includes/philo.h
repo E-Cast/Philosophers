@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/18 01:50:28 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/18 01:58:33 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,13 @@
 # include <stdio.h>//
 # include <unistd.h>//
 
-/*default parameters*/
+typedef struct time
+{
+	struct timeval	tv;
+	long			ms;
+}	t_time;
+
+/*params*/
 
 # ifndef MIN_PHILO_COUNT
 #  define MIN_PHILO_COUNT 1
@@ -47,8 +53,6 @@
 #  define DEFAULT_TIMES_EATEN_TO_END -1
 # endif
 
-/*params*/
-
 typedef struct s_parameters
 {
 	int	philo_count;
@@ -63,13 +67,7 @@ int		ft_atoi(const char *str);
 int		check_params(t_params *p, int argc);
 int		set_params(t_params *params, int argc, char **argv);
 
-/*structs*/
-
-typedef struct time
-{
-	struct timeval	tv;
-	long			ms;
-}	t_time;
+/*super*/
 
 typedef struct s_supervisor_data
 {
@@ -82,6 +80,8 @@ typedef struct s_supervisor_data
 	bool			sp_alive;
 	t_time			sp_t_last_ate;
 }	t_super;
+
+void	*super(void *arg);
 
 /*philo*/
 
