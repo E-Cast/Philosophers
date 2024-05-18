@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:03:02 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/18 01:22:13 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/18 01:48:43 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,19 +103,6 @@ meanwhile for the philo
 // }
 
 //time.tv_usec / 1000 + 1000 * time.tv_sec
-
-void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char *msg)
-{
-	t_time	time;
-
-	pthread_mutex_lock(lock);
-	if (*stop == true)
-		return (pthread_mutex_unlock(lock), (void) 0);
-	else
-		pthread_mutex_unlock(lock);
-	gettimeofday(&time, NULL);
-	printf("%li %i %s\n", time.tv_usec / 1000 + 1000 * time.tv_sec, id, msg);
-}
 
 int	launch_philos(t_table *table, t_params params)
 {

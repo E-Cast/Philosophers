@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/18 01:21:29 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/18 01:50:28 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,11 @@ int		set_params(t_params *params, int argc, char **argv);
 
 /*structs*/
 
-typedef struct timeval	t_time;
+typedef struct time
+{
+	struct timeval	tv;
+	long			ms;
+}	t_time;
 
 typedef struct s_supervisor_data
 {
@@ -124,9 +128,13 @@ void	*ph_calloc(size_t count, size_t size);
 int		make_arrays(t_table *table, t_params params);
 t_table	*make_table(t_params params);
 
+/*utils*/
+
+int		get_ms_time(t_time	*time);
+void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char *msg);
+
 /*tmp*/
 
-void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char *msg);
 t_table	*make_table(t_params params);
 int		make_philo(t_table *table, t_params params, int index);
 

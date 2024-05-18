@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:34:09 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/17 17:09:55 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/18 01:47:49 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	make_super(t_philo *philo)
 	if (pthread_mutex_init(&super.sp_lock, NULL) != 0)
 		return (printf("Error: failed to make supervisor\n"), EXIT_FAILURE);
 	super.sp_alive = true;
-	super.sp_t_last_ate = (t_time){.tv_sec = 0, .tv_usec = 0};
+	// super.sp_t_last_ate = (t_time){.tv_sec = 0, .tv_usec = 0};
 
 	philo->super = super;
 	return (EXIT_SUCCESS);
@@ -76,7 +76,7 @@ int	make_philo(t_table *table, t_params params, int index)
 	if (pthread_mutex_init(&philo.mp_lock, NULL) != 0)
 		return (printf("Error: failed to make philo\n"), EXIT_FAILURE);
 	// philo.mp_alive = true;
-	philo.mp_t_last_ate = (t_time){.tv_sec = 0, .tv_usec = 0};
+	// philo.mp_t_last_ate.tv = (struct timeval){.tv_sec = 0, .tv_usec = 0};
 	if (make_super(&philo) == EXIT_FAILURE)
 		return (printf("Error: failed to make philo\n"), EXIT_FAILURE);
 
