@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:21:44 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/17 17:58:14 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/18 01:21:29 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ typedef struct s_supervisor_data
 	t_time			sp_t_last_ate;
 }	t_super;
 
+/*philo*/
+
 typedef struct s_philosopher_data
 {
 	t_params		params;
@@ -87,7 +89,8 @@ typedef struct s_philosopher_data
 	pthread_mutex_t	*stop_lock;
 	bool			*stop;
 
-	pthread_t		thread;
+	pthread_t		ph_thread;
+	pthread_t		su_thread;
 	pthread_mutex_t	*can_eat;
 	pthread_mutex_t	*fork_r;
 	pthread_mutex_t	*fork_l;
@@ -98,6 +101,10 @@ typedef struct s_philosopher_data
 
 	t_super			super;
 }	t_philo;
+
+void	*philo(void *arg);
+
+/*table*/
 
 typedef struct s_table
 {
@@ -110,8 +117,6 @@ typedef struct s_table
 	pthread_mutex_t	*can_eat;
 	pthread_mutex_t	*forks;
 }	t_table;
-
-/*table.c*/
 
 int		make_super(t_philo *philo);
 int		make_philo(t_table *table, t_params params, int index);

@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:03:02 by ecastong          #+#    #+#             */
-/*   Updated: 2024/05/17 19:58:57 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/05/18 01:22:13 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ meanwhile for the philo
 // 	(void) arg;
 // }
 
+//time.tv_usec / 1000 + 1000 * time.tv_sec
+
 void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char *msg)
 {
 	t_time	time;
@@ -111,22 +113,8 @@ void	log_msg(pthread_mutex_t *lock, bool *stop, int id, char *msg)
 		return (pthread_mutex_unlock(lock), (void) 0);
 	else
 		pthread_mutex_unlock(lock);
-	// (void) lock;
-	// (void) stop;
 	gettimeofday(&time, NULL);
-	printf("%li %i %s\n", time.tv_usec, id, msg);
-}
-
-void	*philo(void *arg)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
-	pthread_mutex_lock(philo->start_lock);
-	usleep(1);
-	pthread_mutex_unlock(philo->start_lock);
-	log_msg(philo->stop_lock, philo->stop, philo->id, "is thinking");
-	return (NULL);
+	printf("%li %i %s\n", time.tv_usec / 1000 + 1000 * time.tv_sec, id, msg);
 }
 
 int	launch_philos(t_table *table, t_params params)
@@ -137,16 +125,19 @@ int	launch_philos(t_table *table, t_params params)
 	pthread_mutex_lock(&table->start_lock);
 	while (index < params.philo_count)
 	{
-		if (pthread_create(&table->philo[index].thread,
-				NULL, philo, &table->philo[index]) != 0)
+		if (pthread_create(&table->philo[index].ph_thread, NULL,
+				philo, &table->philo[index]) != 0)
 		{
+			printf("Error: failed to create philo\n");
 			pthread_mutex_lock(&table->stop_lock);
 			table->stop = true;
 			pthread_mutex_unlock(&table->stop_lock);
 			break ;
 		}
-		index++;
 		usleep(1);
+		pthread_mutex_lock(&table->philo[index].mp_lock);
+		pthread_mutex_unlock(&table->philo[index].mp_lock);
+		index++;
 	}
 	return (index);
 }
@@ -159,7 +150,6 @@ void	monitor(t_table *table, t_params params)
 	while (index < params.philo_count)
 		pthread_mutex_lock(&table->can_eat[index++]);
 	pthread_mutex_unlock(&table->start_lock);
-	printf("neat\n");
 	(void) params;
 }
 
@@ -184,7 +174,7 @@ int	main(int argc, char **argv)
 
 	index = 0;
 	while (index < t_launched)
-		pthread_join(table->philo[index++].thread, NULL);
+		pthread_join(table->philo[index++].ph_thread, NULL);
 	return (free(table->forks), free(table->can_eat), free(table->philo),
 		free(table), EXIT_SUCCESS);
 }

@@ -1,5 +1,6 @@
 SRC				=	main.c \
 					params.c \
+					philo.c \
 					table.c
 
 SRC_DIR			:=	sources/
