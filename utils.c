@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 07:42:33 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/06 08:27:45 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/07 08:00:21 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,19 @@ long	gettime_ms(void)
  * @brief Logs a message to the terminal in the format 
  * "timestamp_in_ms ID message"
  * 
+ * @param time Timestamp to log the message at, if -1 current time will be used.
  * @param ID ID to log the message under.
  * @param msg Message to be logged.
  * @retval SUCCESS on success.
  * @retval ERROR on failure.
  */
-int	log_msg(int ID, const char *msg)
+int	log_msg(long time, int ID, const char *msg)
 {
-	long	ms;
-
-	ms = gettime_ms();
-	if (ms == ERROR)
+	if (time == -1)
+		time = gettime_ms();
+	if (time == ERROR)
 		return (ERROR);
-	if (0 > printf("%li %i %s\n", ms, ID, msg))
+	if (0 > printf("%li %i %s\n", time, ID, msg))
 		return (ERROR);
 	return (SUCCESS);
 }
