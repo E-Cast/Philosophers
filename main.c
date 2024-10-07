@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gettime_ms.c                                       :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/06 07:42:33 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/06 07:43:06 by ecastong         ###   ########.fr       */
+/*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
+/*   Updated: 2024/10/07 09:03:22 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/// @brief Returns the current time in milliseconds.
-/// @retval timestamp in milliseconds on success.
-/// @retval -1 on failure.
-long	gettime_ms(void)
-{
-	struct timeval	time;
 
-	if (gettimeofday(&time, NULL) == -1)
-		return (-1);
-	return (time.tv_usec / 1000 + time.tv_sec * 1000);
+int	main(int argc, char **argv)
+{
+	t_params	params;
+
+	if (argc < 5)
+		return (printf("Error: too few arguments\n"), ERROR);
+	if (get_params(argc, argv, &params) == ERROR)
+		return (ERROR);
+	printf("%i\n%i\n%i\n%i\n%i\n", params.philo_count, params.time_to_die, params.time_to_eat, params.time_to_sleep, params.times_to_eat);
+	log_msg(-1, 1, MSG_DIE);
+	return (SUCCESS);
 }
