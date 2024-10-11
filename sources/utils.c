@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 07:42:33 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/07 09:00:57 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/11 14:07:13 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,24 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	return (num);
+}
+
+/**
+ * @brief Allocates enough space for a pointer with count objects of
+	size size. Writes 0 to every bite of the pointer.
+ * 
+ * @param count Number of objects.
+ * @param size Size of objects.
+ * @retval A valid pointer on success.
+ * @retval Null on failure.
+ */
+void	*ft_calloc(size_t count, size_t size)
+{
+	unsigned char	*ptr;
+
+	ptr = malloc(count * size);
+	if (!ptr)
+		return (NULL);
+	memset(ptr, 0, count * size);
+	return ((void *)ptr);
 }
