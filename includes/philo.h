@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/13 18:39:05 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/13 19:56:44 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ typedef struct s_philo
 	int			id;
 	t_params	parameters;
 
-	t_mutex		*start_lock;
 	t_mutex		*fork_l;
 	t_mutex		*fork_r;
+	t_mutex		*info_lock;
 
 	long		time_last_eaten;
 	int			times_eaten;
@@ -67,8 +67,8 @@ typedef struct s_data
 {
 	t_philo		*philos;
 	pthread_t	*threads;
-	t_mutex		*start_lock;
 	t_mutex		*forks;
+	t_mutex		*info_lock;
 }	t_data;
 
 // Functions
@@ -81,5 +81,9 @@ void	*ft_calloc(size_t count, size_t size);
 
 void	free_data(t_data *data);
 int		init_data(t_params params, t_data *data);
+
+void	wait_threads(int n, pthread_t *threads);
+int		launch_threads(int n, t_data data);
+void	*start_routine(void *arg);
 
 #endif
