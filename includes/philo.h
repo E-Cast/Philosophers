@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/13 10:07:59 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/13 13:36:57 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,27 +57,17 @@ typedef struct s_philo
 
 	t_mutex		*fork_l;
 	t_mutex		*fork_r;
-	// t_mutex		*dead_lock;
 
 	long		time_last_eaten;
-	// int			times_eaten;
-	// int			status;	
+	int			times_eaten;
 }	t_philo;
 
 typedef struct s_data
 {
 	t_philo		*philos;
 	pthread_t	*threads;
-
 	t_mutex		*forks;
-
-	t_mutex		test;
 }	t_data;
-
-# define DEAD 0
-# define THINKING 1
-# define EATING 2 
-# define SLEEPING 3 
 
 // Functions
 
