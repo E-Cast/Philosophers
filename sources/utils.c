@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 07:42:33 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/11 14:07:13 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/13 09:10:55 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ long	gettime_ms(void)
 
 /**
  * @brief Logs a message to the terminal in the format 
- * "timestamp_in_ms ID message"
+ * 	"timestamp_in_ms ID message"
  * 
  * @param time Timestamp to log the message at, if -1 current time will be used.
  * @param ID ID to log the message under.
@@ -82,7 +82,7 @@ int	ft_atoi(const char *str)
 
 /**
  * @brief Allocates enough space for a pointer with count objects of
-	size size. Writes 0 to every bite of the pointer.
+ * 	size size. Writes 0 to every bite of the pointer.
  * 
  * @param count Number of objects.
  * @param size Size of objects.

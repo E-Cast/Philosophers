@@ -1,7 +1,8 @@
 # files
 SRC		=	main.c \
 			get_params.c \
-			utils.c
+			utils.c \
+			init.c
 
 SRC_DIR		:= sources/
 OBJ_DIR		:= objects/
@@ -9,10 +10,10 @@ SRC			:=	$(addprefix $(SRC_DIR), $(SRC))
 OBJ			:=	$(subst $(SRC_DIR), $(OBJ_DIR), $(SRC:.c=.o))
 
 # compilation
-NAME		:= philo
-# DEBUG -g
-# SANITIZE	:=	-fsanitize=address
-CC			:=	gcc -Wall -Werror -Wextra -pthread $(SANITIZE) $(DEBUG)
+NAME		:=	philo
+# DEBUG 		:=	-g
+SANITIZE	:=	-fsanitize=address
+CC			:=	gcc -Wall -Werror -Wextra -pthread $(SANITIZE) $(DEBUG) 
 INC_DIR		:= 	includes
 INCLUDES	:=	-I $(INC_DIR)
 
