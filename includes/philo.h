@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/13 15:19:54 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/13 18:39:05 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct s_data
 {
 	t_philo		*philos;
 	pthread_t	*threads;
-	t_mutex		start_lock;
+	t_mutex		*start_lock;
 	t_mutex		*forks;
 }	t_data;
 

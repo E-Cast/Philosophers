@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:05 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/13 15:21:31 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/13 18:43:09 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ static t_philo	init_philo(t_params params, t_data *data, int index)
 
 	philo.id = index + 1;
 	philo.parameters = params;
+	philo.start_lock = data->start_lock;
 	philo.fork_l = &data->forks[index];
-	philo.start_lock = &data->start_lock;
 	if (params.philo_count == 1)
 		philo.fork_r = NULL;
 	else if (index + 1 == params.philo_count)
@@ -115,7 +115,10 @@ int	init_data(t_params params, t_data *data)
 	data->threads = ft_calloc(params.philo_count + 1, sizeof(pthread_t));
 	if (data->threads == NULL)
 		return (free_data(data), printf("Error: allocation failed.\n"), ERROR);
-	if (pthread_mutex_init(&data->start_lock, NULL) != 0)
+	data->start_lock = ft_calloc(1, sizeof(t_mutex));
+	if (data->start_lock == NULL)
+		return (free_data(data), printf("Error: allocation failed.\n"), ERROR);
+	if (pthread_mutex_init(data->start_lock, NULL) != 0)
 		return (free_data(data), printf("Error: mutex_init failed.\n"), ERROR);
 	if (init_mutex_arr(params.philo_count, &data->forks) == ERROR)
 		return (free_data(data), ERROR);
