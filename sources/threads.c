@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:55:55 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/13 19:56:15 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/13 20:00:59 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	launch_threads(int n, t_data data)
 		if (pthread_create(&data.threads[index], NULL,
 				start_routine, &data.philos[index]))
 			return (printf("test\n"), ERROR);
-		usleep(50);
+		usleep(10);
 		index++;
 	}
 	return (SUCCESS);
