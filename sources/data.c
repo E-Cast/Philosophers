@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:05 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/14 14:59:23 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/14 15:43:40 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ static void	zero_data(t_data *data)
 {
 	data->philos = NULL;
 	data->threads = NULL;
-	data->forks = NULL;
 	data->mic_lock = NULL;
+	data->forks = NULL;
+	data->info_lock = NULL;
 }
 
 /**
@@ -37,10 +38,12 @@ void	free_data(t_data *data)
 	data->philos = NULL;
 	free(data->threads);
 	data->threads = NULL;
-	free(data->forks);
-	data->forks = NULL;
 	free(data->mic_lock);
 	data->mic_lock = NULL;
+	free(data->forks);
+	data->forks = NULL;
+	free(data->info_lock);
+	data->info_lock = NULL;
 }
 
 /**
@@ -86,6 +89,7 @@ static t_philo	init_philo(t_params params, t_data *data, int index)
 
 	philo.id = index + 1;
 	philo.parameters = params;
+
 	philo.mic_lock = data->mic_lock;
 	philo.fork_l = &data->forks[index];
 	if (params.philo_count == 1)
@@ -94,6 +98,9 @@ static t_philo	init_philo(t_params params, t_data *data, int index)
 		philo.fork_r = &data->forks[0];
 	else
 		philo.fork_r = &data->forks[index + 1];
+	philo.info_lock = &data->info_lock[index];
+
+	philo.status = RUNNING;
 	philo.time_last_eaten = 0;
 	philo.times_eaten = 0;
 	return (philo);
@@ -124,6 +131,8 @@ int	init_data(t_params params, t_data *data)
 	if (pthread_mutex_init(data->mic_lock, NULL) != 0)
 		return (free_data(data), printf("Error: mutex_init failed.\n"), ERROR);
 	if (init_mutex_arr(params.philo_count, &data->forks) == ERROR)
+		return (free_data(data), ERROR);
+	if (init_mutex_arr(params.philo_count, &data->info_lock) == ERROR)
 		return (free_data(data), ERROR);
 	index = 0;
 	while (index++ < params.philo_count)
