@@ -6,11 +6,26 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 07:42:33 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/13 09:10:55 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/14 14:35:09 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+/**
+ * @brief Ensures the pointer isn't NULL before calling the function on it.
+ * 
+ * @param mutex_ptr Mutex pointer to call the function on.
+ * @param mutex_func Function to be called.
+ * @retval The function's return value
+ * @retval ERROR if the pointer is NULL.
+ */
+int	safe_mutex(t_mutex *mutex_ptr, int (mutex_func)(t_mutex *))
+{
+	if (mutex_ptr != NULL)
+		return (mutex_func(mutex_ptr));
+	return (ERROR);
+}
 
 /**
  * @brief Returns the current time in milliseconds.
@@ -37,14 +52,16 @@ long	gettime_ms(void)
  * @retval SUCCESS on success.
  * @retval ERROR on failure.
  */
-int	log_msg(long time, int ID, const char *msg)
+int	log_msg(long time, int ID, t_mutex *lock, char *msg)
 {
+	safe_mutex(lock, pthread_mutex_lock);
 	if (time == -1)
 		time = gettime_ms();
 	if (time == ERROR)
-		return (ERROR);
+		return (safe_mutex(lock, pthread_mutex_unlock), ERROR);
 	if (0 > printf("%li %i %s\n", time, ID, msg))
-		return (ERROR);
+		return (safe_mutex(lock, pthread_mutex_unlock), ERROR);
+	safe_mutex(lock, pthread_mutex_unlock);
 	return (SUCCESS);
 }
 
