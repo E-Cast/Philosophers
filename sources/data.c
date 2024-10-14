@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:05 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/13 19:53:23 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/14 14:59:23 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	zero_data(t_data *data)
 	data->philos = NULL;
 	data->threads = NULL;
 	data->forks = NULL;
-	data->info_lock = NULL;
+	data->mic_lock = NULL;
 }
 
 /**
@@ -39,8 +39,8 @@ void	free_data(t_data *data)
 	data->threads = NULL;
 	free(data->forks);
 	data->forks = NULL;
-	free(data->info_lock);
-	data->info_lock = NULL;
+	free(data->mic_lock);
+	data->mic_lock = NULL;
 }
 
 /**
@@ -86,7 +86,7 @@ static t_philo	init_philo(t_params params, t_data *data, int index)
 
 	philo.id = index + 1;
 	philo.parameters = params;
-	philo.info_lock = data->info_lock;
+	philo.mic_lock = data->mic_lock;
 	philo.fork_l = &data->forks[index];
 	if (params.philo_count == 1)
 		philo.fork_r = NULL;
@@ -118,10 +118,10 @@ int	init_data(t_params params, t_data *data)
 	data->threads = ft_calloc(params.philo_count + 1, sizeof(pthread_t));
 	if (data->threads == NULL)
 		return (free_data(data), printf("Error: allocation failed.\n"), ERROR);
-	data->info_lock = ft_calloc(1, sizeof(t_mutex));
-	if (data->info_lock == NULL)
+	data->mic_lock = ft_calloc(1, sizeof(t_mutex));
+	if (data->mic_lock == NULL)
 		return (free_data(data), printf("Error: allocation failed.\n"), ERROR);
-	if (pthread_mutex_init(data->info_lock, NULL) != 0)
+	if (pthread_mutex_init(data->mic_lock, NULL) != 0)
 		return (free_data(data), printf("Error: mutex_init failed.\n"), ERROR);
 	if (init_mutex_arr(params.philo_count, &data->forks) == ERROR)
 		return (free_data(data), ERROR);

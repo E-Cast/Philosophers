@@ -6,20 +6,11 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/13 19:56:11 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/14 15:01:26 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	*start_routine(void *arg)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
-	log_msg(-1, philo->id, "has woken up.");
-	return (NULL);
-}
 
 int	main(int argc, char **argv)
 {

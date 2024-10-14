@@ -3,7 +3,8 @@ SRC		=	main.c \
 			get_params.c \
 			utils.c \
 			data.c \
-			threads.c
+			threads.c \
+			routine.c
 
 SRC_DIR		:= sources/
 OBJ_DIR		:= objects/

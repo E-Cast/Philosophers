@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/13 19:56:44 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/14 15:01:43 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 
 # define MAX_PHILO 200
 # define MIN_TIME 60
+# define PHILO_DELAY 100
 
 typedef struct s_parameters
 {
@@ -57,7 +58,7 @@ typedef struct s_philo
 
 	t_mutex		*fork_l;
 	t_mutex		*fork_r;
-	t_mutex		*info_lock;
+	t_mutex		*mic_lock;
 
 	long		time_last_eaten;
 	int			times_eaten;
@@ -68,13 +69,15 @@ typedef struct s_data
 	t_philo		*philos;
 	pthread_t	*threads;
 	t_mutex		*forks;
-	t_mutex		*info_lock;
+	t_mutex		*mic_lock;
+	t_mutex		*info_l;
 }	t_data;
 
 // Functions
 
+int		safe_mutex(t_mutex *mutex, int (mutex_func)(t_mutex *));
 long	gettime_ms(void);
-int		log_msg(long time, int ID, const char *msg);
+int		log_msg(long time, int ID, t_mutex *lock, char *msg);
 int		ft_atoi(const char *str);
 int		get_params(int argc, char **argv, t_params *params);
 void	*ft_calloc(size_t count, size_t size);
