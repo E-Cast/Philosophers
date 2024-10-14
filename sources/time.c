@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:28 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/14 16:01:57 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/14 16:07:09 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,30 @@ long	gettime_ms(void)
  * @retval SUCCESS on success.
  * @retval ERROR on error.
  */
-int	log_msg(long time, int ID, t_mutex *lock, char *msg)
+int	log_msg(long time, t_philo *philo, char *msg)
 {
-	safe_mutex(lock, pthread_mutex_lock);
+	safe_mutex(philo->mic_lock, pthread_mutex_lock);
 	if (time == -1)
 		time = gettime_ms();
 	if (time == ERROR)
-		return (safe_mutex(lock, pthread_mutex_unlock), ERROR);
-	if (0 > printf("%li %i %s\n", time, ID, msg))
-		return (safe_mutex(lock, pthread_mutex_unlock), ERROR);
-	safe_mutex(lock, pthread_mutex_unlock);
+		return (safe_mutex(philo->mic_lock, pthread_mutex_unlock), ERROR);
+	if (0 > printf("%li %i %s\n", time, philo->id, msg))
+		return (safe_mutex(philo->mic_lock, pthread_mutex_unlock), ERROR);
+	safe_mutex(philo->mic_lock, pthread_mutex_unlock);
 	return (SUCCESS);
 }
+// int	log_msg(long time, int ID, t_mutex *lock, char *msg)
+// {
+// 	safe_mutex(lock, pthread_mutex_lock);
+// 	if (time == -1)
+// 		time = gettime_ms();
+// 	if (time == ERROR)
+// 		return (safe_mutex(lock, pthread_mutex_unlock), ERROR);
+// 	if (0 > printf("%li %i %s\n", time, ID, msg))
+// 		return (safe_mutex(lock, pthread_mutex_unlock), ERROR);
+// 	safe_mutex(lock, pthread_mutex_unlock);
+// 	return (SUCCESS);
+// }
 
 /**
  * @brief Suspends the calling thread's execution for ms milliseconds. 
