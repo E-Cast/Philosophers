@@ -4,7 +4,8 @@ SRC		=	main.c \
 			utils.c \
 			data.c \
 			threads.c \
-			routine.c
+			routine.c \
+			time.c
 
 SRC_DIR		:= sources/
 OBJ_DIR		:= objects/
@@ -14,7 +15,7 @@ OBJ			:=	$(subst $(SRC_DIR), $(OBJ_DIR), $(SRC:.c=.o))
 # compilation
 NAME		:=	philo
 # DEBUG 		:=	-g
-SANITIZE	:=	-fsanitize=address
+SANITIZE	:=	-fsanitize=thread
 CC			:=	gcc -Wall -Werror -Wextra -pthread $(SANITIZE) $(DEBUG) 
 INC_DIR		:= 	includes
 INCLUDES	:=	-I $(INC_DIR)

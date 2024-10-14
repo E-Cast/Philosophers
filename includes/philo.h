@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/14 15:41:32 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/14 16:03:55 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,11 @@ typedef struct s_data
 
 // Functions
 
-int		safe_mutex(t_mutex *mutex, int (mutex_func)(t_mutex *));
 long	gettime_ms(void);
 int		log_msg(long time, int ID, t_mutex *lock, char *msg);
+int		mssleep(int ms);
+
+int		safe_mutex(t_mutex *mutex, int (mutex_func)(t_mutex *));
 int		ft_atoi(const char *str);
 int		get_params(int argc, char **argv, t_params *params);
 void	*ft_calloc(size_t count, size_t size);
