@@ -6,12 +6,21 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 09:03:15 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/07 09:03:17 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/15 18:51:01 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/**
+ * @brief Extracts parameters from user provided command line arguments.
+ * 
+ * @param argc Number of arguments.
+ * @param argv Array of arguments as strings.
+ * @param params Struct to store the parameters in.
+ * @retval SUCCESS on success.
+ * @retval ERROR on error.
+ */
 int	get_params(int argc, char **argv, t_params *params)
 {
 	t_params	p_tmp;

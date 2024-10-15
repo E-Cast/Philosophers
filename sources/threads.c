@@ -6,12 +6,18 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:55:55 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/14 14:40:03 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/15 19:13:55 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/**
+ * @brief Ensures all threads have terminated before returning.
+ * 
+ * @param n Number of threads.
+ * @param threads Array of threads.
+ */
 void	wait_threads(int n, pthread_t *threads)
 {
 	int	index;
@@ -24,15 +30,26 @@ void	wait_threads(int n, pthread_t *threads)
 	}
 }
 
-int	launch_threads(int n, t_data data)
+/**
+ * @brief Sets the start time to the current time and launches all threads.
+ * 
+ * @param n Number of threads to launch.
+ * @param data Struct containing the threads and the arguments for the routine.
+ * @retval SUCCESS on success.
+ * @retval ERROR on error.
+ */
+int	launch_threads(int n, pthread_t *threads, t_philo *philos)
 {
-	int	index;
+	int		index;
+	long	start_time;
 
 	index = 0;
+	start_time = gettime_ms();
 	while (index < n)
 	{
-		if (pthread_create(&data.threads[index], NULL,
-				start_routine, &data.philos[index]))
+		philos[index].time_last_eaten = start_time;
+		if (pthread_create(&threads[index], NULL,
+				start_routine, &philos[index]))
 			return (printf("test\n"), ERROR);
 		usleep(10);
 		index++;

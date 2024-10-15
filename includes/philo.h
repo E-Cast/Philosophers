@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/15 19:04:08 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/15 19:13:44 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int		get_params(int argc, char **argv, t_params *params);
 // routine.c
 
 void	wait_threads(int n, pthread_t *threads);
-int		launch_threads(int n, t_data *data);
+int		launch_threads(int n, pthread_t *threads, t_philo *philos);
 
 long	gettime_ms(void);
 int		log_msg(long time, t_philo *philo, char *msg);
