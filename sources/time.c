@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:28 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/15 19:00:27 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/15 19:24:57 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ long	gettime_ms(void)
 	struct timeval	time;
 
 	if (gettimeofday(&time, NULL) == -1)
-		return (ERROR);
+		return (printf("Error: failed to fetch time.\n"), ERROR);
 	return (time.tv_usec / 1000 + time.tv_sec * 1000);
 }
 
