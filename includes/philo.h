@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/14 16:03:55 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/15 19:04:08 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,35 +66,49 @@ typedef struct s_philo
 	int			times_eaten;
 }	t_philo;
 
-# define RUNNING 1
-# define STOPPED 2
-# define DIED 3
+# define RUNNING 1//use enum?                                                         //
+# define SATED 2
+# define STOPPED 3
 
 typedef struct s_data
 {
+	t_params	params;
+
 	t_philo		*philos;
 	pthread_t	*threads;
-	t_mutex		*mic_lock;
+	t_mutex		mic_lock;
 	t_mutex		*forks;
 	t_mutex		*info_lock;
 }	t_data;
 
 // Functions
 
+void	free_data(t_data **data);
+int		init_data(t_params params, t_data *data);
+
+int		get_params(int argc, char **argv, t_params *params);
+
+// monitor.c
+
+// routine.c
+
+void	wait_threads(int n, pthread_t *threads);
+int		launch_threads(int n, t_data *data);
+
 long	gettime_ms(void);
-int		log_msg(long time, int ID, t_mutex *lock, char *msg);
+int		log_msg(long time, t_philo *philo, char *msg);
 int		mssleep(int ms);
+
+// utils.c
+
 
 int		safe_mutex(t_mutex *mutex, int (mutex_func)(t_mutex *));
 int		ft_atoi(const char *str);
-int		get_params(int argc, char **argv, t_params *params);
 void	*ft_calloc(size_t count, size_t size);
 
-void	free_data(t_data *data);
-int		init_data(t_params params, t_data *data);
 
-void	wait_threads(int n, pthread_t *threads);
-int		launch_threads(int n, t_data data);
+
+
 void	*start_routine(void *arg);
 
 #endif
