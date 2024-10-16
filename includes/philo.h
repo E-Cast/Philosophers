@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 11:25:21 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/16 13:22:11 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,4 +107,46 @@ void	*ft_calloc(size_t count, size_t size);
 
 void	*start_monitor(void *arg);
 
+/*
+
+static int	check_status(t_philo *philo)
+{
+	int	status;
+
+	safe_mutex(philo->info_lock, pthread_mutex_lock);
+	status = philo->status;
+	safe_mutex(philo->info_lock, pthread_mutex_unlock);
+
+	return (status);
+}
+
+int	eaten_check(t_philo *philo_arr, t_params params)
+{
+	int		index;
+	t_philo	*philo;
+
+	index = 0;
+	while (index < params.philo_count)
+	{
+		philo = &philo_arr[index++];
+		safe_mutex(philo->info_lock, pthread_mutex_lock);
+		if (philo->status == STOP)
+			return (safe_mutex(philo->info_lock, pthread_mutex_unlock), -1);
+		if (philo->status != SATED)
+		{
+			if (philo->times_eaten >= params.times_to_eat)
+				philo->status = SATED;
+			else
+				return (safe_mutex(philo->info_lock, pthread_mutex_unlock), 0);
+		}
+		safe_mutex(philo->mic_lock, pthread_mutex_lock);
+		if (!(index < params.philo_count))
+			*philo->mic_status = STOP;
+		safe_mutex(philo->mic_lock, pthread_mutex_unlock);
+		safe_mutex(philo->info_lock, pthread_mutex_unlock);
+	}
+	return (-1);
+}
+data race caused by passing the philo pointer instead of a copy of philo to check status, solved it by passing it a t_philo instead of a t_philo *
+*/
 #endif

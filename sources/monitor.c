@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 18:32:50 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 12:45:10 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/16 13:19:01 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,10 @@ int	eaten_check(t_philo *philo_arr, t_params params)
 			else
 				return (safe_mutex(philo->info_lock, pthread_mutex_unlock), 0);
 		}
+		safe_mutex(philo->mic_lock, pthread_mutex_lock);
 		if (!(index < params.philo_count))
 			*philo->mic_status = STOP;
+		safe_mutex(philo->mic_lock, pthread_mutex_unlock);
 		safe_mutex(philo->info_lock, pthread_mutex_unlock);
 	}
 	return (-1);
@@ -107,7 +109,9 @@ void	*start_monitor(void *arg)
 	index = 0;
 	while (index < params.philo_count)
 	{
+		safe_mutex(data->philos->info_lock, pthread_mutex_lock);
 		data->philos[index].status = STOP;
+		safe_mutex(data->philos->info_lock, pthread_mutex_unlock);
 		index++;
 	}
 	return (NULL);
