@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:28 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 09:10:13 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/16 10:24:30 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ long	gettime_ms(void)
 int	log_msg(long time, t_philo *philo, char *msg)
 {
 	safe_mutex(philo->mic_lock, pthread_mutex_lock);
+	if (*philo->mic_status == STOP)
+		return (safe_mutex(philo->mic_lock, pthread_mutex_unlock), 0);
 	if (time == -1)
 		time = gettime_ms();
 	if (time == -1)

@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 10:10:07 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/16 10:17:36 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_philo
 	t_params	parameters;
 
 	t_mutex		*mic_lock;
+	int			*mic_status;
 	t_mutex		*fork_l;
 	t_mutex		*fork_r;
 	t_mutex		*info_lock;//
@@ -72,6 +73,7 @@ typedef struct s_data
 	t_philo		*philos;
 	pthread_t	*threads;
 	t_mutex		mic_lock;
+	int			mic_status;
 	t_mutex		*forks;
 	t_mutex		*info_lock;
 
