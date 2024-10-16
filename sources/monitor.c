@@ -6,38 +6,57 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 18:32:50 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 10:32:26 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/16 12:45:10 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 /**
- * @brief Checks to see if a philo has starved by comparing the 
+* @brief Checks to see if a philo has starved by comparing the 
  * time it last ate to the current time.
  * 
- * @param philo Philosophers to check.
- * @param time_to_die Time a philosopher can go without eating before starving.
- * @retval 0 if the philo has not starved.
- * @retval -1 if the philo has died.
+ * @param philo_arr Array containing all the philosophers.
+ * @param params Struct containing the user defined parameters.
+ * @retval 0 if no philo has starved.
+ * @retval -1 if a philo has starved.
  */
-static int	starvation_check(t_philo *philo, int time_to_die)
+int	monitor_starvation(t_philo *philo_arr, t_params params)
 {
+	int		index;
+	t_philo	*philo;
 	long	time;
 
-	time = gettime_ms();
-	if (time - philo->time_last_eaten < time_to_die)
-		return (0);
-	safe_mutex(philo->mic_lock, pthread_mutex_lock);
-	*philo->mic_status = STOP;
-	if (0 > printf("%li %i %s\n", time, philo->id, "died"))
-		write(1, "Error: printf failed.", 22);
-	safe_mutex(philo->mic_lock, pthread_mutex_unlock);
-	philo->status = STOP;
-	return (-1);
+	index = 0;
+	while (index < params.philo_count)
+	{
+		philo = &philo_arr[index++];
+		safe_mutex(philo->info_lock, pthread_mutex_lock);
+		time = gettime_ms();
+		if (time - philo->time_last_eaten >= params.time_to_die)
+		{
+			safe_mutex(philo->mic_lock, pthread_mutex_lock);
+			*philo->mic_status = STOP;
+			if (0 > printf("%li %i %s\n", time, philo->id, "died"))
+				write(1, "Error: printf failed.", 22);
+			safe_mutex(philo->mic_lock, pthread_mutex_unlock);
+			philo->status = STOP;
+			return (safe_mutex(philo->info_lock, pthread_mutex_unlock), -1);
+		}
+		safe_mutex(philo->info_lock, pthread_mutex_unlock);
+	}
+	return (0);
 }
 
-int	monitor_cycle(t_data *data, t_params params)
+/**
+ * @brief Checks to see if every philo has eaten enough times.
+ * 
+ * @param data 
+ * @param philo_arr 
+ * @retval 0 if not every philo is sated.
+ * @retval -1 if every philo is sated or one of them has stopped.
+ */
+int	eaten_check(t_philo *philo_arr, t_params params)
 {
 	int		index;
 	t_philo	*philo;
@@ -45,37 +64,51 @@ int	monitor_cycle(t_data *data, t_params params)
 	index = 0;
 	while (index < params.philo_count)
 	{
-		philo = &data->philos[index];
+		philo = &philo_arr[index++];
 		safe_mutex(philo->info_lock, pthread_mutex_lock);
-		if (starvation_check(philo, params.time_to_die) == -1)
+		if (philo->status == STOP)
 			return (safe_mutex(philo->info_lock, pthread_mutex_unlock), -1);
-		// check if sated
+		if (philo->status != SATED)
+		{
+			if (philo->times_eaten >= params.times_to_eat)
+				philo->status = SATED;
+			else
+				return (safe_mutex(philo->info_lock, pthread_mutex_unlock), 0);
+		}
+		if (!(index < params.philo_count))
+			*philo->mic_status = STOP;
 		safe_mutex(philo->info_lock, pthread_mutex_unlock);
-		index++;
 	}
-	return (1);
+	return (-1);
 }
 
-void	stop_all(t_data *data, int philo_count)
+/**
+ * @brief Monitors philosophers and ensures that they stop if one starve,
+ *  or if they all have eaten enough times.
+ * 
+ * @param arg t_data* struct as a void pointer.
+ * @retval NULL.
+ */
+void	*start_monitor(void *arg)
 {
-	int		index;
+	t_data		*data;
+	t_params	params;
+	int			index;
+
+	data = (t_data *)arg;
+	params = data->params;
+	while (monitor_starvation(data->philos, params) != -1)
+	{
+		if (params.times_to_eat > 0 && eaten_check(data->philos, params) == -1)
+			break ;
+		(void) index;
+	}
 
 	index = 0;
-	while (index < philo_count)
+	while (index < params.philo_count)
 	{
 		data->philos[index].status = STOP;
 		index++;
 	}
-	return ;
-}
-
-void	*start_monitor(void *arg)//tmp
-{
-	t_data	*data;
-
-	data = (t_data *)arg;
-	while (monitor_cycle(data, data->params) == 1)
-		(void) data;
-	stop_all(data, data->params.philo_count);
 	return (NULL);
 }
