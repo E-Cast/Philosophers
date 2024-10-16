@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 18:32:50 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 09:54:43 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/16 10:16:05 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	monitor_cycle(t_data *data, t_params params)
 	t_philo	*philo;
 
 	index = 0;
-	while (index < data->params.philo_count)
+	while (index < params.philo_count)
 	{
 		philo = &data->philos[index];
 		safe_mutex(philo->info_lock, pthread_mutex_lock);
@@ -46,6 +46,19 @@ int	monitor_cycle(t_data *data, t_params params)
 	return (1);
 }
 
+void	stop_all(t_data *data, int philo_count)
+{
+	int		index;
+
+	index = 0;
+	while (index < philo_count)
+	{
+		data->philos[index].status = STOP;
+		index++;
+	}
+	return ;
+}
+
 void	*start_monitor(void *arg)//tmp
 {
 	t_data	*data;
@@ -53,6 +66,6 @@ void	*start_monitor(void *arg)//tmp
 	data = (t_data *)arg;
 	while (monitor_cycle(data, data->params) == 1)
 		(void) data;
-	// stop all philos
+	stop_all(data, data->params.philo_count);
 	return (NULL);
 }
