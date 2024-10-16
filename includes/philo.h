@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/15 19:13:44 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/16 10:10:07 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@
 # include <unistd.h>
 # include <string.h>
 # include <stdlib.h>
-
-// Return values.
-
-# define ERROR -1
-# define SUCCESS 0
 
 // Premade log messages.
 
@@ -68,7 +63,7 @@ typedef struct s_philo
 
 # define RUNNING 1//use enum?                                                         //
 # define SATED 2
-# define STOPPED 3
+# define STOP 3
 
 typedef struct s_data
 {
@@ -79,6 +74,8 @@ typedef struct s_data
 	t_mutex		mic_lock;
 	t_mutex		*forks;
 	t_mutex		*info_lock;
+
+	pthread_t	m_thread;
 }	t_data;
 
 // Functions
@@ -99,9 +96,6 @@ long	gettime_ms(void);
 int		log_msg(long time, t_philo *philo, char *msg);
 int		mssleep(int ms);
 
-// utils.c
-
-
 int		safe_mutex(t_mutex *mutex, int (mutex_func)(t_mutex *));
 int		ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size);
@@ -110,5 +104,6 @@ void	*ft_calloc(size_t count, size_t size);
 
 
 void	*start_routine(void *arg);
+void	*start_monitor(void *arg);
 
 #endif

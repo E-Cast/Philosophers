@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 07:42:33 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/14 16:02:08 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/16 10:06:01 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@
  * @param mutex_ptr Mutex pointer to call the function on.
  * @param mutex_func Function to be called.
  * @retval The function's return value
- * @retval ERROR if the pointer is NULL.
+ * @retval -1 if the pointer is NULL.
  */
 int	safe_mutex(t_mutex *mutex_ptr, int (mutex_func)(t_mutex *))
 {
 	if (mutex_ptr != NULL)
 		return (mutex_func(mutex_ptr));
-	return (ERROR);
+	return (-1);
 }
 
 /**

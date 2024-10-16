@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:05 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/15 19:04:10 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/16 10:04:59 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ void	free_data(t_data **data)
  * 
  * @param n Number of mutexes to put inside the array.
  * @param arr Array to initialize.
- * @retval SUCCESS on success.
- * @retval ERROR on error.
+ * @retval 0 on success.
+ * @retval -1 on error.
  */
 static int	init_mutex_arr(size_t n, t_mutex **arr)
 {
@@ -46,18 +46,18 @@ static int	init_mutex_arr(size_t n, t_mutex **arr)
 
 	array = ft_calloc(n + 1, sizeof(t_mutex));
 	if (array == NULL)
-		return (printf("Error: allocation failed.\n"), ERROR);
+		return (printf("Error: allocation failed.\n"), -1);
 	index = 0;
 	while (index < n)
 	{
 		if (pthread_mutex_init(&array[index], NULL) != 0)
 		{
 			printf("Error: mutex_init failed.\n");
-			return (free(array), ERROR);
+			return (free(array), -1);
 		}
 		index++;
 	}
-	return (*arr = array, SUCCESS);
+	return (*arr = array, 0);
 }
 
 /**
@@ -96,8 +96,8 @@ static t_philo	init_philo(t_params params, t_data *data, int index)
  * 
  * @param params Struct containing the parameters used in the initialization.
  * @param data Struct to initialize.
- * @retval SUCCESS on success.
- * @retval ERROR on error.
+ * @retval 0 on success.
+ * @retval -1 on error.
  */
 int	init_data(t_params params, t_data *data)
 {
@@ -106,20 +106,20 @@ int	init_data(t_params params, t_data *data)
 	data->params = params;
 	data->philos = ft_calloc(params.philo_count + 1, sizeof(t_philo));
 	if (data->philos == NULL)
-		return (free_data(&data), printf("Error: allocation failed.\n"), ERROR);
+		return (free_data(&data), printf("Error: allocation failed.\n"), -1);
 	data->threads = ft_calloc(params.philo_count + 1, sizeof(pthread_t));
 	if (data->threads == NULL)
-		return (free_data(&data), printf("Error: allocation failed.\n"), ERROR);
+		return (free_data(&data), printf("Error: allocation failed.\n"), -1);
 
 	if (pthread_mutex_init(&data->mic_lock, NULL) != 0)
-		return (free_data(&data), ERROR);
-	if (init_mutex_arr(params.philo_count, &data->forks) == ERROR)
-		return (free_data(&data), ERROR);
-	if (init_mutex_arr(params.philo_count, &data->info_lock) == ERROR)
-		return (free_data(&data), ERROR);
+		return (free_data(&data), -1);
+	if (init_mutex_arr(params.philo_count, &data->forks) == -1)
+		return (free_data(&data), -1);
+	if (init_mutex_arr(params.philo_count, &data->info_lock) == -1)
+		return (free_data(&data), -1);
 
 	index = 0;
 	while (index++ < params.philo_count)
 		data->philos[index - 1] = init_philo(params, data, index - 1);
-	return (SUCCESS);
+	return (0);
 }
