@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 10:17:36 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/16 11:25:21 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ typedef struct s_philo
 }	t_philo;
 
 # define RUNNING 1//use enum?                                                         //
-# define SATED 2
-# define STOP 3
+# define STOP 2
+# define SATED 3
 
 typedef struct s_data
 {
@@ -89,7 +89,7 @@ int		get_params(int argc, char **argv, t_params *params);
 
 // monitor.c
 
-// routine.c
+void	*start_routine(void *arg);
 
 void	wait_threads(int n, pthread_t *threads);
 int		launch_threads(int n, pthread_t *threads, t_philo *philos);
@@ -105,7 +105,6 @@ void	*ft_calloc(size_t count, size_t size);
 
 
 
-void	*start_routine(void *arg);
 void	*start_monitor(void *arg);
 
 #endif
