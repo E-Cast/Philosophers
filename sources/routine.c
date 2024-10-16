@@ -6,38 +6,28 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 14:57:29 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 13:22:37 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:42:31 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 /**
- * @brief Retrieves and returns the a philo's status.
+ * @brief Retrieves and returns the philo's current state.
  * 
  * @param info_lock The mutex protecting the philo's status.
- * @param philo_status The philo's status variable shared with other threads.
+ * @param philo The philosopher to extract the state of.
  * @retval The philo's status as an int.
  */
-// static int	check_status(t_mutex *info_lock, int *philo_status)
-// {
-// 	int	status;
-
-// 	safe_mutex(info_lock, pthread_mutex_lock);
-// 	status = *philo_status;
-// 	safe_mutex(info_lock, pthread_mutex_unlock);
-
-// 	return (status);
-// }
-static int	check_status(t_philo philo)
+static int	extract_state(t_philo philo)
 {
-	int	status;
+	int	state;
 
 	safe_mutex(philo.info_lock, pthread_mutex_lock);
-	status = philo.status;
+	state = philo.state;
 	safe_mutex(philo.info_lock, pthread_mutex_unlock);
 
-	return (status);
+	return (state);
 }
 
 /**
@@ -53,10 +43,10 @@ static int	eat(t_philo *philo)
 	log_msg(-1, philo, MSG_FORK);
 	safe_mutex(philo->fork_r, pthread_mutex_lock);
 	log_msg(-1, philo, MSG_FORK);
-	if (check_status(*philo) == STOP)
+	if (extract_state(*philo) == STOPPED)
 		return (-1);
 	safe_mutex(philo->info_lock, pthread_mutex_lock);
-	if (philo->status == STOP)
+	if (philo->state == STOPPED)
 		return (safe_mutex(philo->info_lock, pthread_mutex_unlock), -1);
 	time = gettime_ms();
 	philo->time_last_eaten = time;
@@ -83,14 +73,14 @@ static void	recursive_loop(t_philo *philo)
 	}
 	safe_mutex(philo->fork_l, pthread_mutex_unlock);
 	safe_mutex(philo->fork_r, pthread_mutex_unlock);
-	if (check_status(*philo) == STOP)
+	if (extract_state(*philo) == STOPPED)
 		return ;
 	log_msg(-1, philo, MSG_SLEEP);
 	mssleep(philo->parameters.time_to_sleep);
-	if (check_status(*philo) == STOP)
+	if (extract_state(*philo) == STOPPED)
 		return ;
 	log_msg(-1, philo, MSG_THINK);
-	if (check_status(*philo) == STOP)
+	if (extract_state(*philo) == STOPPED)
 		return ;
 	recursive_loop(philo);
 }

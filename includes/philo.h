@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 13:22:11 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:45:46 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,25 +46,35 @@ typedef struct s_parameters
 
 typedef pthread_mutex_t	t_mutex;
 
+typedef enum e_state
+{
+	RUNNING,
+	STOPPED,
+	SATED
+}	t_state;
+
+# define SILENT = 1;
+
 typedef struct s_philo
 {
 	int			id;
 	t_params	parameters;
 
 	t_mutex		*mic_lock;
-	int			*mic_status;
+	t_state		*mic_state;
 	t_mutex		*fork_l;
 	t_mutex		*fork_r;
 	t_mutex		*info_lock;//
 
-	int			status;
+	// int			status;
+	t_state		state;
 	long		time_last_eaten;
 	int			times_eaten;
 }	t_philo;
 
-# define RUNNING 1//use enum?                                                         //
-# define STOP 2
-# define SATED 3
+// # define RUNNING 1//use enum?                                                         //
+// # define STOP 2
+// # define SATED 3
 
 typedef struct s_data
 {
@@ -73,7 +83,7 @@ typedef struct s_data
 	t_philo		*philos;
 	pthread_t	*threads;
 	t_mutex		mic_lock;
-	int			mic_status;
+	t_state		mic_state;
 	t_mutex		*forks;
 	t_mutex		*info_lock;
 
@@ -87,7 +97,7 @@ int		init_data(t_params params, t_data *data);
 
 int		get_params(int argc, char **argv, t_params *params);
 
-// monitor.c
+void	*start_monitor(void *arg);
 
 void	*start_routine(void *arg);
 
@@ -102,51 +112,4 @@ int		safe_mutex(t_mutex *mutex, int (mutex_func)(t_mutex *));
 int		ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size);
 
-
-
-
-void	*start_monitor(void *arg);
-
-/*
-
-static int	check_status(t_philo *philo)
-{
-	int	status;
-
-	safe_mutex(philo->info_lock, pthread_mutex_lock);
-	status = philo->status;
-	safe_mutex(philo->info_lock, pthread_mutex_unlock);
-
-	return (status);
-}
-
-int	eaten_check(t_philo *philo_arr, t_params params)
-{
-	int		index;
-	t_philo	*philo;
-
-	index = 0;
-	while (index < params.philo_count)
-	{
-		philo = &philo_arr[index++];
-		safe_mutex(philo->info_lock, pthread_mutex_lock);
-		if (philo->status == STOP)
-			return (safe_mutex(philo->info_lock, pthread_mutex_unlock), -1);
-		if (philo->status != SATED)
-		{
-			if (philo->times_eaten >= params.times_to_eat)
-				philo->status = SATED;
-			else
-				return (safe_mutex(philo->info_lock, pthread_mutex_unlock), 0);
-		}
-		safe_mutex(philo->mic_lock, pthread_mutex_lock);
-		if (!(index < params.philo_count))
-			*philo->mic_status = STOP;
-		safe_mutex(philo->mic_lock, pthread_mutex_unlock);
-		safe_mutex(philo->info_lock, pthread_mutex_unlock);
-	}
-	return (-1);
-}
-data race caused by passing the philo pointer instead of a copy of philo to check status, solved it by passing it a t_philo instead of a t_philo *
-*/
 #endif

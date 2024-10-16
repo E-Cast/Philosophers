@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:05 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 10:18:19 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:46:16 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static t_philo	init_philo(t_params params, t_data *data, int index)
 	philo.parameters = params;
 
 	philo.mic_lock = &data->mic_lock;
-	philo.mic_status = &data->mic_status;
+	philo.mic_state = &data->mic_state;
 	philo.fork_l = &data->forks[index];
 	if (params.philo_count == 1)
 		philo.fork_r = NULL;
@@ -86,7 +86,7 @@ static t_philo	init_philo(t_params params, t_data *data, int index)
 		philo.fork_r = &data->forks[index + 1];
 	philo.info_lock = &data->info_lock[index];
 
-	philo.status = RUNNING;
+	philo.state = RUNNING;
 	philo.time_last_eaten = 0;
 	philo.times_eaten = 0;
 	return (philo);
@@ -114,7 +114,7 @@ int	init_data(t_params params, t_data *data)
 
 	if (pthread_mutex_init(&data->mic_lock, NULL) != 0)
 		return (free_data(&data), -1);
-	data->mic_status = RUNNING;
+	data->mic_state = RUNNING;
 
 	if (init_mutex_arr(params.philo_count, &data->forks) == -1)
 		return (free_data(&data), -1);

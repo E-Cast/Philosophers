@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 18:32:50 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 13:19:01 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:46:57 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ int	monitor_starvation(t_philo *philo_arr, t_params params)
 		if (time - philo->time_last_eaten >= params.time_to_die)
 		{
 			safe_mutex(philo->mic_lock, pthread_mutex_lock);
-			*philo->mic_status = STOP;
+			*philo->mic_state = STOPPED;
 			if (0 > printf("%li %i %s\n", time, philo->id, "died"))
 				write(1, "Error: printf failed.", 22);
 			safe_mutex(philo->mic_lock, pthread_mutex_unlock);
-			philo->status = STOP;
+			philo->state = STOPPED;
 			return (safe_mutex(philo->info_lock, pthread_mutex_unlock), -1);
 		}
 		safe_mutex(philo->info_lock, pthread_mutex_unlock);
@@ -66,18 +66,18 @@ int	eaten_check(t_philo *philo_arr, t_params params)
 	{
 		philo = &philo_arr[index++];
 		safe_mutex(philo->info_lock, pthread_mutex_lock);
-		if (philo->status == STOP)
+		if (philo->state == STOPPED)
 			return (safe_mutex(philo->info_lock, pthread_mutex_unlock), -1);
-		if (philo->status != SATED)
+		if (philo->state != SATED)
 		{
 			if (philo->times_eaten >= params.times_to_eat)
-				philo->status = SATED;
+				philo->state = SATED;
 			else
 				return (safe_mutex(philo->info_lock, pthread_mutex_unlock), 0);
 		}
 		safe_mutex(philo->mic_lock, pthread_mutex_lock);
 		if (!(index < params.philo_count))
-			*philo->mic_status = STOP;
+			*philo->mic_state = STOPPED;
 		safe_mutex(philo->mic_lock, pthread_mutex_unlock);
 		safe_mutex(philo->info_lock, pthread_mutex_unlock);
 	}
@@ -110,7 +110,7 @@ void	*start_monitor(void *arg)
 	while (index < params.philo_count)
 	{
 		safe_mutex(data->philos->info_lock, pthread_mutex_lock);
-		data->philos[index].status = STOP;
+		data->philos[index].state = STOPPED;
 		safe_mutex(data->philos->info_lock, pthread_mutex_unlock);
 		index++;
 	}
