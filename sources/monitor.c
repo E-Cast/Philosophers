@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 18:32:50 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 18:46:57 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/19 12:39:11 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ int	monitor_starvation(t_philo *philo_arr, t_params params)
 		if (time - philo->time_last_eaten >= params.time_to_die)
 		{
 			safe_mutex(philo->mic_lock, pthread_mutex_lock);
+			if (*philo->mic_state != STOPPED)
+				printf("%li %i %s\n", time, philo->id, "died");
 			*philo->mic_state = STOPPED;
-			if (0 > printf("%li %i %s\n", time, philo->id, "died"))
-				write(1, "Error: printf failed.", 22);
 			safe_mutex(philo->mic_lock, pthread_mutex_unlock);
 			philo->state = STOPPED;
 			return (safe_mutex(philo->info_lock, pthread_mutex_unlock), -1);
@@ -99,13 +99,14 @@ void	*start_monitor(void *arg)
 
 	data = (t_data *)arg;
 	params = data->params;
+	safe_mutex(&data->m_lock, pthread_mutex_lock);
+	safe_mutex(&data->m_lock, pthread_mutex_unlock);
 	while (monitor_starvation(data->philos, params) != -1)
 	{
 		if (params.times_to_eat > 0 && eaten_check(data->philos, params) == -1)
 			break ;
 		(void) index;
 	}
-
 	index = 0;
 	while (index < params.philo_count)
 	{

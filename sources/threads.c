@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:55:55 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/19 10:13:26 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/19 12:33:17 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,34 @@ static void	manage_thread_failure(int n, t_data *data)
 }
 
 /**
+ * @brief Launches half the threads in the array,
+ * skipping over every other thread.
+ * 
+ * @param index Thread to start with.
+ * @param start_time Start time to assign to the philos.
+ * @param n Number of philosophers.
+ * @param data Struct containing the threads, arguments,
+ * and additional program data.
+ * @return int 
+ */
+static int	launch_staggered(int index, long start_time, int n, t_data *data)
+{
+	pthread_t	*th_arr;
+	t_philo		*philos;
+
+	th_arr = data->threads;
+	philos = data->philos;
+	while (index < n)
+	{
+		philos[index].time_last_eaten = start_time;
+		if (pthread_create(&th_arr[index], NULL, start_routine, &philos[index]))
+			return (-1);
+		index += 2;
+	}
+	return (0);
+}
+
+/**
  * @brief Sets the start time to the current time and launches all threads.
  * 
  * @param n Number of threads to launch.
@@ -69,26 +97,16 @@ static void	manage_thread_failure(int n, t_data *data)
  */
 int	launch_threads(int n, t_data *data)
 {
-	int			index;
-	long		start_time;
-	pthread_t	*th_arr;
-	t_philo		*philos;
+	long	start_time;
 
-	index = 0;
 	safe_mutex(&data->m_lock, pthread_mutex_lock);
 	if (pthread_create(&data->m_thread, NULL, start_monitor, data) != 0)
 		return (manage_thread_failure(n, data), -1);
-	th_arr = data->threads;
-	philos = data->philos;
 	start_time = gettime_ms();
-	while (index < n)
-	{
-		philos[index].time_last_eaten = start_time;
-		if (pthread_create(&th_arr[index], NULL, start_routine, &philos[index]))
-			return (manage_thread_failure(n, data), -1);
-		usleep(10);
-		index++;
-	}
+	if (launch_staggered(0, start_time, n, data))
+		return (manage_thread_failure(n, data), -1);
+	if (launch_staggered(1, start_time, n, data))
+		return (manage_thread_failure(n, data), -1);
 	safe_mutex(&data->m_lock, pthread_mutex_unlock);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 14:57:29 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 18:42:31 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/19 12:34:59 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static int	extract_state(t_philo philo)
 	safe_mutex(philo.info_lock, pthread_mutex_lock);
 	state = philo.state;
 	safe_mutex(philo.info_lock, pthread_mutex_unlock);
-
 	return (state);
 }
 
@@ -99,7 +98,7 @@ void	*start_routine(void *arg)
 	if (philo->id % 2 == 0)
 	{
 		log_msg(-1, philo, MSG_THINK);
-		usleep(PHILO_DELAY);
+		mssleep(1);
 	}
 	recursive_loop(philo);
 	return (NULL);

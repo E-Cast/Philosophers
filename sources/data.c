@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:05 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 18:46:16 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/19 12:33:05 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ static t_philo	init_philo(t_params params, t_data *data, int index)
 
 	philo.id = index + 1;
 	philo.parameters = params;
-
 	philo.mic_lock = &data->mic_lock;
 	philo.mic_state = &data->mic_state;
 	philo.fork_l = &data->forks[index];
@@ -85,7 +84,6 @@ static t_philo	init_philo(t_params params, t_data *data, int index)
 	else
 		philo.fork_r = &data->forks[index + 1];
 	philo.info_lock = &data->info_lock[index];
-
 	philo.state = RUNNING;
 	philo.time_last_eaten = 0;
 	philo.times_eaten = 0;
@@ -111,16 +109,15 @@ int	init_data(t_params params, t_data *data)
 	data->threads = ft_calloc(params.philo_count + 1, sizeof(pthread_t));
 	if (data->threads == NULL)
 		return (free_data(&data), printf("Error: allocation failed.\n"), -1);
-
 	if (pthread_mutex_init(&data->mic_lock, NULL) != 0)
 		return (free_data(&data), -1);
 	data->mic_state = RUNNING;
-
 	if (init_mutex_arr(params.philo_count, &data->forks) == -1)
 		return (free_data(&data), -1);
 	if (init_mutex_arr(params.philo_count, &data->info_lock) == -1)
 		return (free_data(&data), -1);
-
+	if (pthread_mutex_init(&data->m_lock, NULL) != 0)
+		return (free_data(&data), -1);
 	index = 0;
 	while (index++ < params.philo_count)
 		data->philos[index - 1] = init_philo(params, data, index - 1);
