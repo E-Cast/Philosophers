@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 12:55:59 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/19 10:13:50 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	one_philo(int time_to_sleep)
 	printf("%li 1 %s\n", time, MSG_FORK);
 	mssleep(time_to_sleep);
 	time = gettime_ms();
-	printf("%li 1 %s\n", time, MSG_DIE);
+	printf("%li 1 %s\n", time, "died");
 }
 
 //make sure to check the return of every function and add error messages
@@ -40,11 +40,8 @@ int	main(int argc, char **argv)
 		return (printf("Error: allocation failed.\n"), -1);
 	if (init_data(params, data) == -1)
 		return (-1);
-	if (launch_threads(params.philo_count, data->threads, data->philos) == -1)
+	if (launch_threads(params.philo_count, data) == -1)
 		return (free_data(&data), -1);
-	//launch monitor
-	pthread_create(&data->m_thread, NULL, start_monitor, data);//
-
 	wait_threads(params.philo_count, data->threads);
 	pthread_join(data->m_thread, NULL);
 	return (free_data(&data), 0);
