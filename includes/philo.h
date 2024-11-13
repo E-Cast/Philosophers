@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/19 12:39:57 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/10/19 19:00:39 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,11 +114,23 @@ odd philo_count:
 t_to_die min == (t_to_eat * 2) + t_to_sleep + (0.22 * philo_count) + 10
 note: 0.22 is what works on my machine.
 */
-// Make eating be the last message
-// Testing
+// Make eating be the last message //
+// Testing //
 // Cleanup
 // Comment as much as possible
 // Make readme
 // Final tests
 // Push to git
+/*
+To do at 42
+Norm
+Tests
+*/
+/*
+tools learnt:
+Student's philo visualizer
+fsanitize
+ltrace
+things learnt:
+*/
 #endif
