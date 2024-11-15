@@ -17,7 +17,8 @@ OBJ			:=	$(subst $(SRC_DIR), $(OBJ_DIR), $(SRC:.c=.o))
 NAME		:=	philo
 # DEBUG 		:=	-g
 # SANITIZE	:=	-fsanitize=thread
-CC			:=	gcc -Wall -Werror -Wextra -pthread $(SANITIZE) $(DEBUG) 
+OPTIMIZE	:=	-O3
+CC			:=	gcc -Wall -Werror -Wextra -pthread $(OPTIMIZE) $(SANITIZE) $(DEBUG) 
 INC_DIR		:= 	includes
 INCLUDES	:=	-I $(INC_DIR)
 

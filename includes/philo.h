@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/19 19:00:39 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/14 19:31:07 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ void	wait_threads(int n, pthread_t *threads);
 int		launch_threads(int n, t_data *data);
 
 long	gettime_ms(void);
-int		log_msg(long time, t_philo *philo, char *msg);
-int		mssleep(int ms);
+long	log_msg(t_philo *philo, char *msg);
+void	wait_ms(int ms);
 
 int		safe_mutex(t_mutex *mutex, int (mutex_func)(t_mutex *));
 int		ft_atoi(const char *str);

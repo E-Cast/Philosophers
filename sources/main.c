@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/19 10:13:50 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/14 19:31:07 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	one_philo(int time_to_sleep)
 
 	time = gettime_ms();
 	printf("%li 1 %s\n", time, MSG_FORK);
-	mssleep(time_to_sleep);
+	wait_ms(time_to_sleep);
 	time = gettime_ms();
 	printf("%li 1 %s\n", time, "died");
 }

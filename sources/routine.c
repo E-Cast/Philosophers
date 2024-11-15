@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 14:57:29 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/19 12:34:59 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/14 19:31:07 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,19 @@ static int	extract_state(t_philo philo)
  */
 static int	eat(t_philo *philo)
 {
-	long	time;
-
 	safe_mutex(philo->fork_l, pthread_mutex_lock);
-	log_msg(-1, philo, MSG_FORK);
+	log_msg(philo, MSG_FORK);
 	safe_mutex(philo->fork_r, pthread_mutex_lock);
-	log_msg(-1, philo, MSG_FORK);
+	log_msg(philo, MSG_FORK);
 	if (extract_state(*philo) == STOPPED)
 		return (-1);
 	safe_mutex(philo->info_lock, pthread_mutex_lock);
 	if (philo->state == STOPPED)
 		return (safe_mutex(philo->info_lock, pthread_mutex_unlock), -1);
-	time = gettime_ms();
-	philo->time_last_eaten = time;
-	log_msg(time, philo, MSG_EAT);
+	philo->time_last_eaten = log_msg(philo, MSG_EAT);
 	philo->times_eaten++;
 	safe_mutex(philo->info_lock, pthread_mutex_unlock);
-	mssleep(philo->parameters.time_to_eat);
+	wait_ms(philo->parameters.time_to_eat);
 	return (0);
 }
 
@@ -74,11 +70,11 @@ static void	recursive_loop(t_philo *philo)
 	safe_mutex(philo->fork_r, pthread_mutex_unlock);
 	if (extract_state(*philo) == STOPPED)
 		return ;
-	log_msg(-1, philo, MSG_SLEEP);
-	mssleep(philo->parameters.time_to_sleep);
+	log_msg(philo, MSG_SLEEP);
+	wait_ms(philo->parameters.time_to_sleep);
 	if (extract_state(*philo) == STOPPED)
 		return ;
-	log_msg(-1, philo, MSG_THINK);
+	log_msg(philo, MSG_THINK);
 	if (extract_state(*philo) == STOPPED)
 		return ;
 	recursive_loop(philo);
@@ -97,8 +93,8 @@ void	*start_routine(void *arg)
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
 	{
-		log_msg(-1, philo, MSG_THINK);
-		mssleep(1);
+		log_msg(philo, MSG_THINK);
+		usleep(1000);
 	}
 	recursive_loop(philo);
 	return (NULL);
