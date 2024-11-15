@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:28 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/14 19:30:34 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/15 00:30:50 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,6 @@ void	wait_ms(int ms)
 	while (current_time < target_time)
 	{
 		current_time = gettime_ms();
-		usleep(100);
+		usleep(500);
 	}
 }

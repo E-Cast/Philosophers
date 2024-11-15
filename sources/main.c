@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/14 19:31:07 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/15 00:56:08 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ static void	one_philo(int time_to_sleep)
 	printf("%li 1 %s\n", time, "died");
 }
 
-//make sure to check the return of every function and add error messages
+// make sure to check the return of every function and add error messages
+// check for data races
+// check for memory leaks
 int	main(int argc, char **argv)
 {
 	t_params	params;

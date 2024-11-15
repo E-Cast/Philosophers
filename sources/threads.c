@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:55:55 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/19 12:33:17 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/15 01:01:49 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,23 @@ static void	manage_thread_failure(int n, t_data *data)
  * and additional program data.
  * @return int 
  */
-static int	launch_staggered(int index, long start_time, int n, t_data *data)
+static int	staggered_launch(long start_time, int n, t_data *data)
 {
 	pthread_t	*th_arr;
 	t_philo		*philos;
+	int			index;
 
 	th_arr = data->threads;
 	philos = data->philos;
+	index = 0;
+	while (index < n)
+	{
+		philos[index].time_last_eaten = start_time;
+		if (pthread_create(&th_arr[index], NULL, start_routine, &philos[index]))
+			return (-1);
+		index += 2;
+	}
+	index = 1;
 	while (index < n)
 	{
 		philos[index].time_last_eaten = start_time;
@@ -103,9 +113,7 @@ int	launch_threads(int n, t_data *data)
 	if (pthread_create(&data->m_thread, NULL, start_monitor, data) != 0)
 		return (manage_thread_failure(n, data), -1);
 	start_time = gettime_ms();
-	if (launch_staggered(0, start_time, n, data))
-		return (manage_thread_failure(n, data), -1);
-	if (launch_staggered(1, start_time, n, data))
+	if (staggered_launch(start_time, n, data))
 		return (manage_thread_failure(n, data), -1);
 	safe_mutex(&data->m_lock, pthread_mutex_unlock);
 	return (0);
