@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 11:37:57 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 11:49:36 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,33 @@ static void	terminate_all(t_data *data)
 	while (index < data->params.philo_count)
 		pthread_join(data->threads[index++], NULL);
 	pthread_join(data->l_thread, NULL);
+}
+
+static void	recursive_monitor(t_data *data)
+{
+	int		index;
+	t_philo	*philo;
+	long	time;
+
+	index = 0;
+	while (index < data->params.philo_count)
+	{
+		safe_mutex(&data->mic_lock, pthread_mutex_lock);
+		if (data->mic_state == STOPPED)
+			return ((void) safe_mutex(&data->mic_lock, pthread_mutex_unlock));
+		safe_mutex(&data->mic_lock, pthread_mutex_unlock);
+		philo = &data->philos[index++];
+		safe_mutex(philo->info_lock, pthread_mutex_lock);
+		time = gettime_ms();
+		if (time - philo->time_last_eaten >= data->params.time_to_die)
+		{
+			log_msg(philo, 0, M_ID_DIE);
+			return ((void) safe_mutex(philo->info_lock, pthread_mutex_unlock));
+		}
+		safe_mutex(philo->info_lock, pthread_mutex_unlock);
+	}
+	usleep(250);
+	return (recursive_monitor(data));
 }
 
 // make sure to check the return of every function and add error messages

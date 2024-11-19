@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 11:37:48 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 11:43:26 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ void	*ft_calloc(size_t count, size_t size);
 void	*start_logger(void *arg);
 int		clear_list(t_node **list);
 int		new_node(t_node **list, long time, int id, t_msg_id msg);
-int		recursive_monitor(t_data *data);
+// int		recursive_monitor(t_data *data);
 
 /*	Formula:
 If: time_to_eat <= time_to_sleep

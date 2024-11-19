@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 18:32:50 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 11:41:03 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 11:42:57 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,31 +68,4 @@
 // 		usleep(250);
 // 	return (NULL);
 // }
-
-int	recursive_monitor(t_data *data)
-{
-	int		index;
-	t_philo	*philo;
-	long	time;
-
-	index = 0;
-	while (index < data->params.philo_count)
-	{
-		safe_mutex(&data->mic_lock, pthread_mutex_lock);
-		if (data->mic_state == STOPPED)
-			return (safe_mutex(&data->mic_lock, pthread_mutex_unlock), -1);
-		safe_mutex(&data->mic_lock, pthread_mutex_unlock);
-		philo = &data->philos[index++];
-		safe_mutex(philo->info_lock, pthread_mutex_lock);
-		time = gettime_ms();
-		if (time - philo->time_last_eaten >= data->params.time_to_die)
-		{
-			log_msg(philo, 0, M_ID_DIE);
-			return (safe_mutex(philo->info_lock, pthread_mutex_unlock), -1);
-		}
-		safe_mutex(philo->info_lock, pthread_mutex_unlock);
-	}
-	usleep(250);
-	return (recursive_monitor(data));
-}
 
