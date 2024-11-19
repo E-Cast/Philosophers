@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 11:22:28 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 11:37:57 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 static void	terminate_all(t_data *data)
 {
 	int		index;
+
+	safe_mutex(&data->mic_lock, pthread_mutex_lock);
+	data->mic_state = STOPPED;
+	safe_mutex(&data->mic_lock, pthread_mutex_unlock);
 
 	index = 0;
 	while (index < data->params.philo_count)
@@ -57,7 +61,7 @@ int	main(int argc, char **argv)
 		return (-1);
 	if (launch_threads(params.philo_count, data) == -1)
 		return (free_data(&data), -1);
-	start_monitor(data);
+	recursive_monitor(data);
 	terminate_all(data);
 	return (free_data(&data), 0);
 }
