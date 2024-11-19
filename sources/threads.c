@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:55:55 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 10:16:08 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:42:09 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	wait_threads(int n, t_data *data)
 		index++;
 	}
 	// printf("1\n");
-	pthread_join(data->m_thread, NULL);
+	// pthread_join(data->m_thread, NULL);
 	// printf("2\n");
 	pthread_join(data->l_thread, NULL);
 	// printf("3\n");
@@ -111,10 +111,11 @@ int	launch_threads(int n, t_data *data)
 
 	if (pthread_create(&data->l_thread, NULL, start_logger, data) != 0)
 		return (manage_thread_failure(n, data), -1);
-	if (pthread_create(&data->m_thread, NULL, start_monitor, data) != 0)
-		return (manage_thread_failure(n, data), -1);
+	// if (pthread_create(&data->m_thread, NULL, start_monitor, data) != 0)
+		// return (manage_thread_failure(n, data), -1);
 	start_time = gettime_ms();
 	if (staggered_launch(start_time, n, data))
 		return (manage_thread_failure(n, data), -1);
+	start_monitor((void *)data);
 	return (0);
 }
