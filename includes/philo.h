@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 09:29:36 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:09:11 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@
  */
 # define MSG_DIE "died"
 
-typedef enum e_messages_id
+typedef enum e_message_id
 {
-	ID_FORK,
-	ID_EAT,
-	ID_SLEEP,
-	ID_THINK,
-	ID_DIE
+	M_ID_FORK,
+	M_ID_EAT,
+	M_ID_SLEEP,
+	M_ID_THINK,
+	M_ID_DIE
 }	t_msg_id;
 
 /**
@@ -84,23 +84,12 @@ typedef struct s_parameters
 	int	times_to_eat;
 }	t_params;
 
-// Philo
-
 typedef pthread_mutex_t	t_mutex;
 
-/**
- * @brief Enum of the program or philosophers' states:
- *
- * @param RUNNING The program or philosopher is running normally.
- * @param STOPPED The program or philosopher is stopped or should be stopping.
- * @param SATED The philosopher is running normally and has eaten at least
- * as many times as times_to_eat.///////////////////////////////////////////////////////////////////I think sated might be unecessary, which would make the enum itself unecessary
- */
 typedef enum e_state
 {
 	RUNNING,
-	STOPPED,
-	SATED
+	STOPPED
 }	t_state;
 
 typedef struct s_node
@@ -218,20 +207,16 @@ Else if time_to_eat <= time_to_sleep
 Minimum time_to_die == time_to_eat * 2 + time_to_sleep + 10;
 Else
 Minimum time_to_die == time_to_eat * 3 + 10;
+*/
 
-*/
-// Make eating be the last message //
-// Testing //
 // Cleanup
+// Norm
 // Comment as much as possible
-// Make readme
+// Testing
+// Double check
+// Peer overlook
 // Final tests
-// Push to git
-/*
-To do at 42
-Norm
-Tests
-*/
+// Make readme
 /*
 tools learnt:
 Student's philo visualizer
@@ -246,5 +231,6 @@ data races
 having the last message be a death or eating
 terminal buffer/scrolling
 unreliable sleep
+htop
 */
 #endif

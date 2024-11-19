@@ -18,7 +18,7 @@ OBJ			:=	$(subst $(SRC_DIR), $(OBJ_DIR), $(SRC:.c=.o))
 # compilation
 NAME		:=	philo
 # WARNING: DEBUG and SANITIZE both slow down the program a lot. Expect deaths.
-# DEBUG 		:=	-g
+DEBUG 		:=	-g
 # SANITIZE	:=	-fsanitize=thread
 # WARNING: Do not enable both SANITIZE and OPTIMIZE. They are NOT compatible.
 # OPTIMIZE	:=	-O3

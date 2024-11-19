@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 22:35:16 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 09:31:20 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:12:49 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ static int	check_if_end(int t_to_eat, int *t_eaten, t_msg_id msg, int id)
 	int	index;
 
 	index = 0;
-	if (msg == ID_DIE)
+	if (msg == M_ID_DIE)
 		return (-1);
 	if (t_to_eat == 0)
 		return (0);
-	if (msg != ID_EAT)
+	if (msg != M_ID_EAT)
 		return (0);
 	t_eaten[id - 1]++;
 	index = 0;
@@ -36,13 +36,13 @@ static int	check_if_end(int t_to_eat, int *t_eaten, t_msg_id msg, int id)
 
 static const char	*id_to_msg(t_msg_id id)
 {
-	if (id == ID_FORK)
+	if (id == M_ID_FORK)
 		return (MSG_FORK);
-	else if (id == ID_EAT)
+	else if (id == M_ID_EAT)
 		return (MSG_EAT);
-	else if (id == ID_SLEEP)
+	else if (id == M_ID_SLEEP)
 		return (MSG_SLEEP);
-	else if (id == ID_THINK)
+	else if (id == M_ID_THINK)
 		return (MSG_THINK);
 	else
 		return (MSG_DIE);

@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 08:57:01 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:17:12 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void	one_philo(int time_to_sleep)
 // rename all the shared variables to add an easy to find prefix with search
 // destroy the mutexes at the end
 // bus error if I let it run for long enough
+// do I even need a monitor thread? could the main just handle it?
 int	main(int argc, char **argv)
 {
 	t_params	params;
