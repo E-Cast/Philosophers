@@ -6,7 +6,6 @@ SRC		=	main.c \
 			threads.c \
 			routine.c \
 			time.c \
-			monitor.c \
 			logger.c \
 			node.c
 

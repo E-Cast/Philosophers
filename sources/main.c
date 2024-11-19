@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 11:49:36 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:07:04 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static void	terminate_all(t_data *data)
 	safe_mutex(&data->mic_lock, pthread_mutex_lock);
 	data->mic_state = STOPPED;
 	safe_mutex(&data->mic_lock, pthread_mutex_unlock);
-
 	index = 0;
 	while (index < data->params.philo_count)
 	{
@@ -41,12 +40,12 @@ static void	recursive_monitor(t_data *data)
 	long	time;
 
 	index = 0;
+	safe_mutex(&data->mic_lock, pthread_mutex_lock);
+	if (data->mic_state == STOPPED)
+		return ((void) safe_mutex(&data->mic_lock, pthread_mutex_unlock));
+	safe_mutex(&data->mic_lock, pthread_mutex_unlock);
 	while (index < data->params.philo_count)
 	{
-		safe_mutex(&data->mic_lock, pthread_mutex_lock);
-		if (data->mic_state == STOPPED)
-			return ((void) safe_mutex(&data->mic_lock, pthread_mutex_unlock));
-		safe_mutex(&data->mic_lock, pthread_mutex_unlock);
 		philo = &data->philos[index++];
 		safe_mutex(philo->info_lock, pthread_mutex_lock);
 		time = gettime_ms();
@@ -57,7 +56,7 @@ static void	recursive_monitor(t_data *data)
 		}
 		safe_mutex(philo->info_lock, pthread_mutex_unlock);
 	}
-	usleep(250);
+	usleep(300);
 	return (recursive_monitor(data));
 }
 
@@ -69,6 +68,7 @@ static void	recursive_monitor(t_data *data)
 // destroy the mutexes at the end
 // bus error if I let it run for long enough
 // do I even need a monitor thread? could the main just handle it?
+// check all usleep calls for optimization
 int	main(int argc, char **argv)
 {
 	t_params	params;

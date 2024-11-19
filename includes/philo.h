@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 11:43:26 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:08:26 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,11 +174,8 @@ int		init_data(t_params params, t_data *data);
 
 int		get_params(int argc, char **argv, t_params *params);
 
-void	*start_monitor(void *arg);
-
 void	*start_routine(void *arg);
 
-void	wait_threads(int n, t_data *data);
 int		launch_threads(int n, t_data *data);
 
 long	gettime_ms(void);
