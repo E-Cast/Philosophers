@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 00:24:47 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 06:33:57 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ static void	one_philo(int time_to_sleep)
 // rename mic_loc to a more appropriate name for what it's used
 // rename all the shared variables to add an easy to find prefix with search
 // do i need to alloc backlog? or only it's nodes.
+// destroy the mutexes at the end
+// bus error if I let it run for long enough
 int	main(int argc, char **argv)
 {
 	t_params	params;
@@ -51,27 +53,3 @@ int	main(int argc, char **argv)
 	wait_threads(params.philo_count, data);
 	return (free_data(&data), 0);
 }
-
-/*
-Philo:
-	locks mic lock
-	assembles message
-	adds message as a new node to the end of the buffer linked list
-	unlocks mic lock
-
-Buffer:
-	locks mic lock
-	copies first message of the linked list
-	sets the string to null and frees it
-	deletes the first node and sets the second one as first
-	unlocks mic lock
-	checks if message signals the end (death message or eating message which makes all philos sated)
-	writes message to terminal
-
-advantage:
-	1. The program does not have to wait for the terminal buffer to execute things.
-	2. It doesn't have to silence the philos as fast since the buffer can stop printing in the middle of execution. Thus making the philos do less checks and execute faster.
-
-notes:
-	Messages can either be a string the buffer simlply has to print to the terminal, or a struct containing the timestamp, id, and message type.
-*/

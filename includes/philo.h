@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 00:44:07 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 06:32:57 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,14 @@
  */
 # define MSG_DIE "died"
 
+typedef enum e_messages_id
+{
+	ID_FORK,
+	ID_EAT,
+	ID_SLEEP,
+	ID_THINK,
+	ID_DIE
+}	t_msg_id;
 
 /**
  * @brief Maximum number of philosophers the program supports.
@@ -54,7 +62,7 @@
  * A higher number makes wait_ms less precise but also less ressource intensive.
  * Testing shows 100 to be the minimum value.
  */
-# define WAIT_ACCURACY 200
+# define WAIT_ACCURACY 500
 
 /**
  * @brief Struct containing the user defined parameters.
@@ -100,6 +108,7 @@ typedef struct s_node
 	long			timestamp;
 	int				id;
 	const char		*message;
+	// t_msg_id		message;
 	struct s_node	*next;
 }	t_node;
 

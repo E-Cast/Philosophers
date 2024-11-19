@@ -18,8 +18,8 @@ OBJ			:=	$(subst $(SRC_DIR), $(OBJ_DIR), $(SRC:.c=.o))
 # compilation
 NAME		:=	philo
 # WARNING: DEBUG and SANITIZE both slow down the program a lot. Expect deaths.
-# DEBUG 		:=	-Og
-# SANITIZE	:=	-fsanitize=address
+# DEBUG 		:=	-g
+# SANITIZE	:=	-fsanitize=thread
 # WARNING: Do not enable both SANITIZE and OPTIMIZE. They are NOT compatible.
 # OPTIMIZE	:=	-O3
 CC			:=	gcc -Wall -Werror -Wextra -pthread $(OPTIMIZE) $(SANITIZE) $(DEBUG) 
@@ -28,7 +28,7 @@ INCLUDES	:=	-I $(INC_DIR)
 
 all: $(NAME)
 $(NAME): $(OBJ_DIR) $(OBJ)
-	@$(CC)$(INCLUDES) $(OBJ) -o $@
+	@$(CC)$(OPTIMIZE)$(SANITIZE)$(DEBUG) $(INCLUDES) $(OBJ) -o $@
 	@echo "$(CC)$(INCLUDES) -o $(NAME)"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
