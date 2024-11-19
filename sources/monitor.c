@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 18:32:50 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 21:53:07 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 22:24:33 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ int	monitor_starvation(t_philo *philo_arr, t_params params)
 		philo = &philo_arr[index++];
 		safe_mutex(philo->info_lock, pthread_mutex_lock);
 		time = gettime_ms();
-		if (time - philo->time_last_eaten >= params.time_to_die)
+		if (philo->time_last_eaten != -1 && time - philo->time_last_eaten
+			>= params.time_to_die)
 		{
 			safe_mutex(philo->mic_lock, pthread_mutex_lock);
 			if (*philo->mic_state != STOPPED)

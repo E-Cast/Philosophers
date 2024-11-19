@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:05 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 21:53:02 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 22:23:10 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static t_philo	init_philo(t_params params, t_data *data, int index)
 		philo.fork_r = &data->forks[index + 1];
 	philo.info_lock = &data->info_lock[index];
 	philo.state = RUNNING;
-	philo.time_last_eaten = 0;
+	philo.time_last_eaten = -1;
 	philo.times_eaten = 0;
 	return (philo);
 }

@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:55:55 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 22:12:53 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 22:30:58 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,9 @@ static int	staggered_launch(long start_time, int n, t_data *data)
 	index = 0;
 	while (index < n)
 	{
+		safe_mutex(philos[index].info_lock, pthread_mutex_lock);
 		philos[index].time_last_eaten = start_time;
+		safe_mutex(philos[index].info_lock, pthread_mutex_unlock);
 		if (pthread_create(&th_arr[index], NULL, start_routine, &philos[index]))
 			return (-1);
 		index += 2;
@@ -103,10 +105,10 @@ int	launch_threads(int n, t_data *data)
 {
 	long	start_time;
 
+	if (pthread_create(&data->m_thread, NULL, start_monitor, data) != 0)
+		return (manage_thread_failure(n, data), -1);
 	start_time = gettime_ms();
 	if (staggered_launch(start_time, n, data))
-		return (manage_thread_failure(n, data), -1);
-	if (pthread_create(&data->m_thread, NULL, start_monitor, data) != 0)
 		return (manage_thread_failure(n, data), -1);
 	return (0);
 }
