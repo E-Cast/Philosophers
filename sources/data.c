@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:05 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 17:48:23 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 21:53:02 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,6 @@ int	init_data(t_params params, t_data *data)
 	if (init_mutex_arr(params.philo_count, &data->forks) == -1)
 		return (free_data(&data), -1);
 	if (init_mutex_arr(params.philo_count, &data->info_lock) == -1)
-		return (free_data(&data), -1);
-	if (pthread_mutex_init(&data->m_lock, NULL) != 0)
 		return (free_data(&data), -1);
 	index = 0;
 	while (index++ < params.philo_count)

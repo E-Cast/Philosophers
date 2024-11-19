@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 18:32:50 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 18:02:46 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 21:53:07 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,10 @@ void	*start_monitor(void *arg)
 
 	data = (t_data *)arg;
 	params = data->params;
-	safe_mutex(&data->m_lock, pthread_mutex_lock);
-	safe_mutex(&data->m_lock, pthread_mutex_unlock);
+	safe_mutex(&data->mic_lock, pthread_mutex_lock);
+	if (data->mic_state == STOPPED)
+		return (NULL);
+	safe_mutex(&data->mic_lock, pthread_mutex_unlock);
 	while (monitor_starvation(data->philos, params) != -1)
 	{
 		if (params.times_to_eat > 0 && eaten_check(data->philos, params) == -1)

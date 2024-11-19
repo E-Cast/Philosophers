@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:55:55 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 18:02:54 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 21:54:54 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
  * @param n Number of threads.
  * @param threads Array of threads.
  */
-void	wait_threads(int n, pthread_t *threads)
+void	wait_threads(int n, pthread_t *threads, pthread_t m_thread)
 {
 	int	index;
 
@@ -28,6 +28,7 @@ void	wait_threads(int n, pthread_t *threads)
 		pthread_join(threads[index], NULL);
 		index++;
 	}
+	pthread_join(m_thread, NULL);
 }
 
 /**
@@ -53,8 +54,7 @@ static void	manage_thread_failure(int n, t_data *data)
 		philo->state = STOPPED;
 		safe_mutex(philo->info_lock, pthread_mutex_unlock);
 	}
-	safe_mutex(&data->m_lock, pthread_mutex_unlock);
-	wait_threads(n, data->threads);
+	wait_threads(n, data->threads, data->m_thread);
 	return ;
 }
 
@@ -109,12 +109,10 @@ int	launch_threads(int n, t_data *data)
 {
 	long	start_time;
 
-	safe_mutex(&data->m_lock, pthread_mutex_lock);
-	if (pthread_create(&data->m_thread, NULL, start_monitor, data) != 0)
-		return (manage_thread_failure(n, data), -1);
 	start_time = gettime_ms();
 	if (staggered_launch(start_time, n, data))
 		return (manage_thread_failure(n, data), -1);
-	safe_mutex(&data->m_lock, pthread_mutex_unlock);
+	if (pthread_create(&data->m_thread, NULL, start_monitor, data) != 0)
+		return (manage_thread_failure(n, data), -1);
 	return (0);
 }

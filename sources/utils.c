@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 07:42:33 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/16 10:06:01 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 21:50:57 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	*ft_calloc(size_t count, size_t size)
 {
 	unsigned char	*ptr;
 
+	// printf("Allocating: count:%li * size:%li bytes for a total of %li bytes\n", count, size, count * size);
 	ptr = malloc(count * size);
 	if (!ptr)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 14:57:29 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 17:48:40 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 21:43:04 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ void	*start_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	if (extract_state(*philo) == STOPPED)
+		return (NULL);
 	if (philo->id % 2 == 0)
 	{
 		log_msg(philo, MSG_THINK);

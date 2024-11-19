@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 19:01:23 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 21:52:55 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,6 @@ typedef struct s_data
 	t_mutex		*info_lock;
 
 	pthread_t	m_thread;
-	t_mutex		m_lock;
 }	t_data;
 
 // Functions
@@ -165,7 +164,7 @@ void	*start_monitor(void *arg);
 
 void	*start_routine(void *arg);
 
-void	wait_threads(int n, pthread_t *threads);
+void	wait_threads(int n, pthread_t *threads, pthread_t m_thread);
 int		launch_threads(int n, t_data *data);
 
 long	gettime_ms(void);
