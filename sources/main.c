@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 22:29:41 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 00:24:47 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static void	one_philo(int time_to_sleep)
 // check for memory leaks
 // try launching monitor after all the threads
 // rename mic_loc to a more appropriate name for what it's used
+// rename all the shared variables to add an easy to find prefix with search
+// do i need to alloc backlog? or only it's nodes.
 int	main(int argc, char **argv)
 {
 	t_params	params;
@@ -46,7 +48,7 @@ int	main(int argc, char **argv)
 		return (-1);
 	if (launch_threads(params.philo_count, data) == -1)
 		return (free_data(&data), -1);
-	wait_threads(params.philo_count, data->threads, data->m_thread);
+	wait_threads(params.philo_count, data);
 	return (free_data(&data), 0);
 }
 

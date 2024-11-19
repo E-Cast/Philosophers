@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:55:55 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 22:30:58 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 00:46:21 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,18 @@
  * @param n Number of threads.
  * @param threads Array of threads.
  */
-void	wait_threads(int n, pthread_t *threads, pthread_t m_thread)
+void	wait_threads(int n, t_data *data)
 {
 	int	index;
 
 	index = 0;
 	while (index < n)
 	{
-		pthread_join(threads[index], NULL);
+		pthread_join(data->threads[index], NULL);
 		index++;
 	}
-	pthread_join(m_thread, NULL);
+	pthread_join(data->m_thread, NULL);
+	pthread_join(data->l_thread, NULL);
 }
 
 /**
@@ -54,7 +55,7 @@ static void	manage_thread_failure(int n, t_data *data)
 		philo->state = STOPPED;
 		safe_mutex(philo->info_lock, pthread_mutex_unlock);
 	}
-	wait_threads(n, data->threads, data->m_thread);
+	wait_threads(n, data);
 	return ;
 }
 
@@ -105,6 +106,8 @@ int	launch_threads(int n, t_data *data)
 {
 	long	start_time;
 
+	if (pthread_create(&data->l_thread, NULL, start_logger, data) != 0)
+		return (manage_thread_failure(n, data), -1);
 	if (pthread_create(&data->m_thread, NULL, start_monitor, data) != 0)
 		return (manage_thread_failure(n, data), -1);
 	start_time = gettime_ms();

@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 21:52:55 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 00:44:07 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@
  * @brief Premade log message for when a philosopher starts thinking.
  */
 # define MSG_THINK "is thinking"
+/**
+ * @brief Premade log message for when a philosopher dies.
+ */
+# define MSG_DIE "died"
+
 
 /**
  * @brief Maximum number of philosophers the program supports.
@@ -90,6 +95,14 @@ typedef enum e_state
 	SATED
 }	t_state;
 
+typedef struct s_node
+{
+	long			timestamp;
+	int				id;
+	const char		*message;
+	struct s_node	*next;
+}	t_node;
+
 /**
  * @brief Struct containing all the external and shared data a philosopher has.
  * 
@@ -114,6 +127,7 @@ typedef struct s_philo
 
 	t_mutex		*mic_lock;
 	t_state		*mic_state;
+	t_node		**backlog;
 	t_mutex		*fork_l;
 	t_mutex		*fork_r;
 	t_mutex		*info_lock;
@@ -147,10 +161,12 @@ typedef struct s_data
 	pthread_t	*threads;
 	t_mutex		mic_lock;
 	t_state		mic_state;
+	t_node		**backlog;
 	t_mutex		*forks;
 	t_mutex		*info_lock;
 
 	pthread_t	m_thread;
+	pthread_t	l_thread;
 }	t_data;
 
 // Functions
@@ -164,16 +180,21 @@ void	*start_monitor(void *arg);
 
 void	*start_routine(void *arg);
 
-void	wait_threads(int n, pthread_t *threads, pthread_t m_thread);
+void	wait_threads(int n, t_data *data);
 int		launch_threads(int n, t_data *data);
 
 long	gettime_ms(void);
-long	log_msg(t_philo *philo, char *msg);
+long	log_msg(t_philo *philo, long time, char *msg);
 void	wait_ms(int ms);
 
 int		safe_mutex(t_mutex *mutex, int (mutex_func)(t_mutex *));
 int		ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size);
+
+
+void	*start_logger(void *arg);
+int		clear_list(t_node **list);
+int		new_node(t_node **list, long time, int id, const char *msg);
 
 /*	Formula:
 If: time_to_eat <= time_to_sleep

@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 14:57:29 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 21:43:04 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 00:13:48 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ static int	extract_state(t_philo philo)
 static int	eat(t_philo *philo)
 {
 	safe_mutex(philo->fork_l, pthread_mutex_lock);
-	log_msg(philo, MSG_FORK);
+	log_msg(philo, 0, MSG_FORK);
 	safe_mutex(philo->fork_r, pthread_mutex_lock);
-	log_msg(philo, MSG_FORK);
+	log_msg(philo, 0, MSG_FORK);
 	if (extract_state(*philo) == STOPPED)
 		return (-1);
 	safe_mutex(philo->info_lock, pthread_mutex_lock);
 	if (philo->state == STOPPED)
 		return (safe_mutex(philo->info_lock, pthread_mutex_unlock), -1);
-	philo->time_last_eaten = log_msg(philo, MSG_EAT);
+	philo->time_last_eaten = log_msg(philo, 0, MSG_EAT);
 	philo->times_eaten++;
 	safe_mutex(philo->info_lock, pthread_mutex_unlock);
 	wait_ms(philo->params.time_to_eat);
@@ -70,11 +70,11 @@ static void	recursive_loop(t_philo *philo)
 	safe_mutex(philo->fork_r, pthread_mutex_unlock);
 	if (extract_state(*philo) == STOPPED)
 		return ;
-	log_msg(philo, MSG_SLEEP);
+	log_msg(philo, 0, MSG_SLEEP);
 	wait_ms(philo->params.time_to_sleep);
 	if (extract_state(*philo) == STOPPED)
 		return ;
-	log_msg(philo, MSG_THINK);
+	log_msg(philo, 0, MSG_THINK);
 	if (extract_state(*philo) == STOPPED)
 		return ;
 	recursive_loop(philo);
@@ -95,7 +95,7 @@ void	*start_routine(void *arg)
 		return (NULL);
 	if (philo->id % 2 == 0)
 	{
-		log_msg(philo, MSG_THINK);
+		log_msg(philo, 0, MSG_THINK);
 		usleep(1000);
 	}
 	recursive_loop(philo);

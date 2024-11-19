@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:05 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 22:23:10 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 23:50:19 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ void	free_data(t_data **data)
 	(*data)->forks = NULL;
 	free((*data)->info_lock);
 	(*data)->info_lock = NULL;
+	clear_list((*data)->backlog);
+	free((*data)->backlog);
+	(*data)->backlog = NULL;
 	free(*data);
 	*data = NULL;
 }
@@ -87,6 +90,7 @@ static t_philo	init_philo(t_params params, t_data *data, int index)
 	philo.state = RUNNING;
 	philo.time_last_eaten = -1;
 	philo.times_eaten = 0;
+	philo.backlog = data->backlog;
 	return (philo);
 }
 
@@ -116,6 +120,10 @@ int	init_data(t_params params, t_data *data)
 		return (free_data(&data), -1);
 	if (init_mutex_arr(params.philo_count, &data->info_lock) == -1)
 		return (free_data(&data), -1);
+	data->backlog = ft_calloc(1, sizeof(t_node *));
+	if (data->backlog == NULL)
+		return (free_data(&data), -1);
+	*(data->backlog) = NULL;
 	index = 0;
 	while (index++ < params.philo_count)
 		data->philos[index - 1] = init_philo(params, data, index - 1);

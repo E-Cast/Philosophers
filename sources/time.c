@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:28 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 17:37:09 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 00:13:12 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,32 @@ long	gettime_ms(void)
  * @retval The timestamp the message was logged with on success.
  * @retval -1 on error.
  */
-long	log_msg(t_philo *philo, char *msg)
-{
-	long	time;
+// long	log_msg(t_philo *philo, char *msg)
+// {
+// 	long	time;
 
+// 	safe_mutex(philo->mic_lock, pthread_mutex_lock);
+// 	if (*philo->mic_state == STOPPED)
+// 		return (safe_mutex(philo->mic_lock, pthread_mutex_unlock), 0);
+// 	time = gettime_ms();
+// 	if (time == -1)
+// 		return (safe_mutex(philo->mic_lock, pthread_mutex_unlock), -1);
+// 	if (0 > printf("%li %i %s\n", time, philo->id, msg))
+// 		return (safe_mutex(philo->mic_lock, pthread_mutex_unlock), -1);
+// 	safe_mutex(philo->mic_lock, pthread_mutex_unlock);
+// 	return (time);
+// }
+
+long	log_msg(t_philo *philo, long time, char *msg)
+{
 	safe_mutex(philo->mic_lock, pthread_mutex_lock);
-	if (*philo->mic_state == STOPPED)
-		return (safe_mutex(philo->mic_lock, pthread_mutex_unlock), 0);
-	time = gettime_ms();
+	// if (*philo->mic_state == STOPPED)
+	// 	return (safe_mutex(philo->mic_lock, pthread_mutex_unlock), 0);
+	if (time == 0)
+		time = gettime_ms();
 	if (time == -1)
 		return (safe_mutex(philo->mic_lock, pthread_mutex_unlock), -1);
-	if (0 > printf("%li %i %s\n", time, philo->id, msg))
+	if (new_node(philo->backlog, time, philo->id, msg) == -1)
 		return (safe_mutex(philo->mic_lock, pthread_mutex_unlock), -1);
 	safe_mutex(philo->mic_lock, pthread_mutex_unlock);
 	return (time);

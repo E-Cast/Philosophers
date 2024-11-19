@@ -6,7 +6,9 @@ SRC		=	main.c \
 			threads.c \
 			routine.c \
 			time.c \
-			monitor.c
+			monitor.c \
+			logger.c \
+			node.c
 
 SRC_DIR		:= sources/
 OBJ_DIR		:= objects/
@@ -16,7 +18,7 @@ OBJ			:=	$(subst $(SRC_DIR), $(OBJ_DIR), $(SRC:.c=.o))
 # compilation
 NAME		:=	philo
 # WARNING: DEBUG and SANITIZE both slow down the program a lot. Expect deaths.
-DEBUG 		:=	-Og
+# DEBUG 		:=	-Og
 # SANITIZE	:=	-fsanitize=address
 # WARNING: Do not enable both SANITIZE and OPTIMIZE. They are NOT compatible.
 # OPTIMIZE	:=	-O3
