@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 23:26:10 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 09:31:39 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:17:31 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,3 @@ int	new_node(t_node **list, long time, int id, t_msg_id msg)
 	cursor->next = node;
 	return (0);
 }
-
-// t_node	*new_list(void *content)
-// {
-// 	t_node	*node;
-
-// 	node = ft_calloc(1, sizeof(t_node));
-// 	if (!node)
-// 		return (NULL);
-// 	node->content = content;
-// 	node->next = NULL;
-// 	return (node);
-// }
