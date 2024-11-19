@@ -6,28 +6,28 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 22:35:16 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 07:03:17 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 09:31:20 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	check_if_end(int times_to_eat, int *times_eaten, t_node *node)
+static int	check_if_end(int t_to_eat, int *t_eaten, t_msg_id msg, int id)
 {
 	int	index;
 
 	index = 0;
-	if (node->message == ID_DIE)
+	if (msg == ID_DIE)
 		return (-1);
-	if (times_to_eat == 0)
+	if (t_to_eat == 0)
 		return (0);
-	if (node->message == ID_EAT)
+	if (msg != ID_EAT)
 		return (0);
-	times_eaten[node->id - 1]++;
+	t_eaten[id - 1]++;
 	index = 0;
-	while (times_eaten[index] >= 0)
+	while (t_eaten[index] >= 0)
 	{
-		if (times_eaten[index] < times_to_eat)
+		if (t_eaten[index] < t_to_eat)
 			return (0);
 		index++;
 	}
@@ -37,7 +37,7 @@ static int	check_if_end(int times_to_eat, int *times_eaten, t_node *node)
 static const char	*id_to_msg(t_msg_id id)
 {
 	if (id == ID_FORK)
-		return (MSG_THINK);
+		return (MSG_FORK);
 	else if (id == ID_EAT)
 		return (MSG_EAT);
 	else if (id == ID_SLEEP)
@@ -64,9 +64,14 @@ static int	logger_loop(t_data *data, int times_to_eat, int *times_eaten)
 		node = *(data->backlog);
 		*(data->backlog) = (*(data->backlog))->next;
 		safe_mutex(&data->mic_lock, pthread_mutex_unlock);
-		printf("%li %i %s\n", node->timestamp, node->id, id_to_msg(node->message));
-		if (check_if_end(times_to_eat, times_eaten, node) != 0)
+		printf("%li %i %s\n", node->timestamp, node->id, id_to_msg(node->msg));
+		if (check_if_end(times_to_eat, times_eaten, node->msg, node->id) != 0)
+		{
+			safe_mutex(&data->mic_lock, pthread_mutex_lock);
+			data->mic_state = STOPPED;
+			safe_mutex(&data->mic_lock, pthread_mutex_unlock);
 			return (free(node), -1);
+		}
 		free(node);
 	}
 }
@@ -89,4 +94,3 @@ void	*start_logger(void *arg)
 	logger_loop(data, data->params.times_to_eat, times_eaten);
 	return (NULL);
 }
-

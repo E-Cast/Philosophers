@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 06:33:57 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 08:57:01 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,8 @@ static void	one_philo(int time_to_sleep)
 // make sure to check the return of every function and add error messages
 // check for data races
 // check for memory leaks
-// try launching monitor after all the threads
 // rename mic_loc to a more appropriate name for what it's used
 // rename all the shared variables to add an easy to find prefix with search
-// do i need to alloc backlog? or only it's nodes.
 // destroy the mutexes at the end
 // bus error if I let it run for long enough
 int	main(int argc, char **argv)

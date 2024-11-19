@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:55:55 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 00:46:21 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 09:22:34 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@ void	wait_threads(int n, t_data *data)
 		pthread_join(data->threads[index], NULL);
 		index++;
 	}
+	printf("1\n");
 	pthread_join(data->m_thread, NULL);
+	printf("2\n");
 	pthread_join(data->l_thread, NULL);
+	printf("3\n");
 }
 
 /**

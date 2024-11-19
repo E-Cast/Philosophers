@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 06:55:18 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 09:29:36 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ typedef struct s_node
 	long			timestamp;
 	int				id;
 	// const char		*message;
-	t_msg_id		message;
+	t_msg_id		msg;
 	struct s_node	*next;
 }	t_node;
 

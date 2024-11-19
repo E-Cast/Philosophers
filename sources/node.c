@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 23:26:10 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 06:55:58 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 09:31:39 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	new_node(t_node **list, long time, int id, t_msg_id msg)
 		return (-1);
 	node->timestamp = time;
 	node->id = id;
-	node->message = msg;
+	node->msg = msg;
 	if (*list == NULL)
 		return (*list = node, 0);
 	cursor = *list;
