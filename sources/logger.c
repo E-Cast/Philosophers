@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 22:35:16 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 12:03:38 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:40:31 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static const char	*id_to_msg(t_msg_id id)
 		return (MSG_DIE);
 }
 
-static int	logger_loop(t_data *data, int times_to_eat, int *times_eaten)
+static int	logger_loop(t_data *data, int times_to_eat, int *times_eaten)// need to add abort state and checks for it
 {
 	t_node	*node;
 
@@ -68,7 +68,7 @@ static int	logger_loop(t_data *data, int times_to_eat, int *times_eaten)
 		if (check_if_end(times_to_eat, times_eaten, node->msg, node->id) != 0)
 		{
 			safe_mutex(&data->mic_lock, pthread_mutex_lock);
-			data->mic_state = STOPPED;
+			data->mic_state = STOP;
 			safe_mutex(&data->mic_lock, pthread_mutex_unlock);
 			return (free(node), -1);
 		}

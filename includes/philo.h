@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 12:12:11 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:38:03 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,9 @@ typedef pthread_mutex_t	t_mutex;
 
 typedef enum e_state
 {
-	RUNNING,
-	STOPPED
+	RUN,
+	STOP,
+	ABBORT
 }	t_state;
 
 typedef struct s_node
@@ -189,6 +190,7 @@ void	*ft_calloc(size_t count, size_t size);
 void	*start_logger(void *arg);
 int		clear_list(t_node **list);
 int		new_node(t_node **list, long time, int id, t_msg_id msg);
+void	*philo_loop(void *arg);
 // int		recursive_monitor(t_data *data);
 
 /*	Formula:

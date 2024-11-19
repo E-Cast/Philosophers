@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:05 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 23:50:19 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:37:49 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static t_philo	init_philo(t_params params, t_data *data, int index)
 	else
 		philo.fork_r = &data->forks[index + 1];
 	philo.info_lock = &data->info_lock[index];
-	philo.state = RUNNING;
+	philo.state = RUN;
 	philo.time_last_eaten = -1;
 	philo.times_eaten = 0;
 	philo.backlog = data->backlog;
@@ -115,7 +115,7 @@ int	init_data(t_params params, t_data *data)
 		return (free_data(&data), printf("Error: allocation failed.\n"), -1);
 	if (pthread_mutex_init(&data->mic_lock, NULL) != 0)
 		return (free_data(&data), -1);
-	data->mic_state = RUNNING;
+	data->mic_state = RUN;
 	if (init_mutex_arr(params.philo_count, &data->forks) == -1)
 		return (free_data(&data), -1);
 	if (init_mutex_arr(params.philo_count, &data->info_lock) == -1)

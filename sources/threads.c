@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:55:55 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 11:22:49 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:57:41 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	manage_thread_failure(int n, t_data *data)
 	t_philo	*philo;
 
 	safe_mutex(&data->mic_lock, pthread_mutex_lock);
-	data->mic_state = STOPPED;
+	data->mic_state = STOP;
 	safe_mutex(&data->mic_lock, pthread_mutex_unlock);
 	printf("Error: Failed to create thread.\n");
 	index = 0;
@@ -51,10 +51,10 @@ static void	manage_thread_failure(int n, t_data *data)
 	{
 		philo = &data->philos[index++];
 		safe_mutex(philo->info_lock, pthread_mutex_lock);
-		philo->state = STOPPED;
+		philo->state = STOP;
 		safe_mutex(philo->info_lock, pthread_mutex_unlock);
 	}
-	// wait_threads(n, data);
+	// wait_threads(n, data); //
 	return ;
 }
 
@@ -83,7 +83,7 @@ static int	staggered_launch(long start_time, int n, t_data *data)
 		safe_mutex(philos[index].info_lock, pthread_mutex_lock);
 		philos[index].time_last_eaten = start_time;
 		safe_mutex(philos[index].info_lock, pthread_mutex_unlock);
-		if (pthread_create(&th_arr[index], NULL, start_routine, &philos[index]))
+		if (pthread_create(&th_arr[index], NULL, philo_loop, &philos[index]))
 			return (-1);
 		index += 2;
 		if (index >= n && index % 2 == 0)

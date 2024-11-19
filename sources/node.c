@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 23:26:10 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 12:17:31 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:53:40 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,21 @@
 int	clear_list(t_node **list)
 {
 	t_node	*current_node;
+	int		index; //
 
-	if (list == NULL || *list == NULL)
+	if (list == NULL || *list == NULL)//
 		return (-1);
+	index = 0; //
 	while (*list)
 	{
+		index++; //
 		current_node = *list;
 		*list = (*list)->next;
 		free(current_node);
 	}
 	free(*list);
 	*list = NULL;
+	printf("\n%i\n\n", index);
 	return (0);
 }
 
