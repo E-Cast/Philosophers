@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 06:34:54 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 06:55:18 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ typedef struct s_node
 {
 	long			timestamp;
 	int				id;
-	const char		*message;
-	// t_msg_id		message;
+	// const char		*message;
+	t_msg_id		message;
 	struct s_node	*next;
 }	t_node;
 
@@ -193,7 +193,7 @@ void	wait_threads(int n, t_data *data);
 int		launch_threads(int n, t_data *data);
 
 long	gettime_ms(void);
-long	log_msg(t_philo *philo, long time, char *msg);
+long	log_msg(t_philo *philo, long time, t_msg_id message);
 void	wait_ms(int ms);
 
 int		safe_mutex(t_mutex *mutex, int (mutex_func)(t_mutex *));
@@ -203,7 +203,7 @@ void	*ft_calloc(size_t count, size_t size);
 
 void	*start_logger(void *arg);
 int		clear_list(t_node **list);
-int		new_node(t_node **list, long time, int id, const char *msg);
+int		new_node(t_node **list, long time, int id, t_msg_id msg);
 
 /*	Formula:
 If: time_to_eat <= time_to_sleep

@@ -6,45 +6,22 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 22:35:16 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 06:34:52 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 07:03:17 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-/*Compares the ascii values of str1 and str2. Returns an
-	integer greater than, equal to, or less than 0 depending on 
-	if str1 is greater than, equal to, or less than str2*/
-static int	my_strcmp(const char *str1, const char *str2)
-{
-	size_t	i;
-
-	if (!str1 && !str2)
-		return (0);
-	if (!str1)
-		return (-1);
-	if (!str2)
-		return (1);
-	i = 0;
-	while (str1[i] || str2[i])
-	{
-		if (str1[i] != str2[i])
-			return ((unsigned char)str1[i] - (unsigned char)str2[i]);
-		i++;
-	}
-	return (0);
-}
 
 static int	check_if_end(int times_to_eat, int *times_eaten, t_node *node)
 {
 	int	index;
 
 	index = 0;
-	if (my_strcmp(MSG_DIE, node->message) == 0)
+	if (node->message == ID_DIE)
 		return (-1);
 	if (times_to_eat == 0)
 		return (0);
-	if (my_strcmp(MSG_EAT, node->message) != 0)
+	if (node->message == ID_EAT)
 		return (0);
 	times_eaten[node->id - 1]++;
 	index = 0;
@@ -55,6 +32,20 @@ static int	check_if_end(int times_to_eat, int *times_eaten, t_node *node)
 		index++;
 	}
 	return (-1);
+}
+
+static const char	*id_to_msg(t_msg_id id)
+{
+	if (id == ID_FORK)
+		return (MSG_THINK);
+	else if (id == ID_EAT)
+		return (MSG_EAT);
+	else if (id == ID_SLEEP)
+		return (MSG_SLEEP);
+	else if (id == ID_THINK)
+		return (MSG_THINK);
+	else
+		return (MSG_DIE);
 }
 
 static int	logger_loop(t_data *data, int times_to_eat, int *times_eaten)
@@ -73,7 +64,7 @@ static int	logger_loop(t_data *data, int times_to_eat, int *times_eaten)
 		node = *(data->backlog);
 		*(data->backlog) = (*(data->backlog))->next;
 		safe_mutex(&data->mic_lock, pthread_mutex_unlock);
-		printf("%li %i %s\n", node->timestamp, node->id, node->message);
+		printf("%li %i %s\n", node->timestamp, node->id, id_to_msg(node->message));
 		if (check_if_end(times_to_eat, times_eaten, node) != 0)
 			return (free(node), -1);
 		free(node);

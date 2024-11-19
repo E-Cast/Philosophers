@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 23:26:10 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 06:06:37 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 06:55:58 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	clear_list(t_node **list)
 	return (0);
 }
 
-int	new_node(t_node **list, long time, int id, const char *msg)
+int	new_node(t_node **list, long time, int id, t_msg_id msg)
 {
 	t_node	*node;
 	t_node	*cursor;

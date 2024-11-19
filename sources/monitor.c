@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 18:32:50 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 00:44:11 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 06:55:40 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	monitor_starvation(t_philo *philo_arr, t_params params)
 		{
 			safe_mutex(philo->mic_lock, pthread_mutex_lock);
 			if (*philo->mic_state != STOPPED)
-				new_node(philo->backlog, time, philo->id, MSG_DIE);
+				new_node(philo->backlog, time, philo->id, ID_DIE);
 			*philo->mic_state = STOPPED;
 			safe_mutex(philo->mic_lock, pthread_mutex_unlock);
 			philo->state = STOPPED;

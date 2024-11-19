@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:28 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 00:13:12 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 06:55:07 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ long	gettime_ms(void)
 // 	return (time);
 // }
 
-long	log_msg(t_philo *philo, long time, char *msg)
+long	log_msg(t_philo *philo, long time, t_msg_id message)
 {
 	safe_mutex(philo->mic_lock, pthread_mutex_lock);
 	// if (*philo->mic_state == STOPPED)
@@ -61,7 +61,7 @@ long	log_msg(t_philo *philo, long time, char *msg)
 		time = gettime_ms();
 	if (time == -1)
 		return (safe_mutex(philo->mic_lock, pthread_mutex_unlock), -1);
-	if (new_node(philo->backlog, time, philo->id, msg) == -1)
+	if (new_node(philo->backlog, time, philo->id, message) == -1)
 		return (safe_mutex(philo->mic_lock, pthread_mutex_unlock), -1);
 	safe_mutex(philo->mic_lock, pthread_mutex_unlock);
 	return (time);
