@@ -6,21 +6,28 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 10:17:12 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 11:22:28 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	one_philo(int time_to_sleep)
+static void	terminate_all(t_data *data)
 {
-	long	time;
+	int		index;
 
-	time = gettime_ms();
-	printf("%li 1 %s\n", time, MSG_FORK);
-	wait_ms(time_to_sleep);
-	time = gettime_ms();
-	printf("%li 1 %s\n", time, "died");
+	index = 0;
+	while (index < data->params.philo_count)
+	{
+		safe_mutex(data->philos[index].info_lock, pthread_mutex_lock);
+		data->philos[index].state = STOPPED;
+		safe_mutex(data->philos[index].info_lock, pthread_mutex_unlock);
+		index++;
+	}
+	index = 0;
+	while (index < data->params.philo_count)
+		pthread_join(data->threads[index++], NULL);
+	pthread_join(data->l_thread, NULL);
 }
 
 // make sure to check the return of every function and add error messages
@@ -36,19 +43,21 @@ int	main(int argc, char **argv)
 	t_params	params;
 	t_data		*data;
 
-	if (argc < 5)
-		return (printf("Error: too few arguments\n"), -1);
 	if (get_params(argc, argv, &params) == -1)
 		return (-1);
 	if (params.philo_count == 1)
-		return (one_philo(params.time_to_die), 0);
+	{
+		printf("%li 1 %s\n", gettime_ms(), MSG_FORK);
+		wait_ms(params.time_to_die);
+		printf("%li 1 %s\n", gettime_ms(), MSG_DIE);
+		return (0);
+	}
 	data = ft_calloc(1, sizeof(t_data));
-	if (data == NULL)
-		return (printf("Error: allocation failed.\n"), -1);
-	if (init_data(params, data) == -1)
+	if (data == NULL || init_data(params, data) == -1)
 		return (-1);
 	if (launch_threads(params.philo_count, data) == -1)
 		return (free_data(&data), -1);
-	wait_threads(params.philo_count, data);
+	start_monitor(data);
+	terminate_all(data);
 	return (free_data(&data), 0);
 }

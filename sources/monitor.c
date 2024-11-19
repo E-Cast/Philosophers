@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 18:32:50 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 10:28:25 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:53:58 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,6 @@ int	monitor_starvation(t_philo *philo_arr, t_params params)
 	return (0);
 }
 
-void	stop_philos(t_params params, t_philo *philo_arr)
-{
-	int		index;
-
-	index = 0;
-	while (index < params.philo_count)
-	{
-		safe_mutex(philo_arr[index].info_lock, pthread_mutex_lock);
-		philo_arr[index].state = STOPPED;
-		safe_mutex(philo_arr[index].info_lock, pthread_mutex_unlock);
-		index++;
-	}
-}
-
 /**
  * @brief Monitors philosophers and ensures that they stop if one starve,
  *  or if they all have eaten enough times.
@@ -80,6 +66,5 @@ void	*start_monitor(void *arg)
 	safe_mutex(&data->mic_lock, pthread_mutex_unlock);
 	while (monitor_starvation(data->philos, data->params) != -1)
 		usleep(250);
-	stop_philos(data->params, data->philos);
 	return (NULL);
 }

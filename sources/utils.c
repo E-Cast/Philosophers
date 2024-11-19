@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 07:42:33 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 10:36:36 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 11:09:21 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	*ft_calloc(size_t count, size_t size)
 
 	ptr = malloc(count * size);
 	if (!ptr)
-		return (NULL);
+		return (printf("Error: allocation failed.\n"), NULL);
 	memset(ptr, 0, count * size);
 	return ((void *)ptr);
 }
