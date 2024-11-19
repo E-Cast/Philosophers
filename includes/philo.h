@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 12:08:26 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:12:11 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,6 @@ long	log_msg(t_philo *philo, long time, t_msg_id message);
 void	wait_ms(int ms);
 
 int		safe_mutex(t_mutex *mutex, int (mutex_func)(t_mutex *));
-int		ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size);
 
 

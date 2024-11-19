@@ -6,11 +6,13 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 09:03:15 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 11:07:44 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:14:21 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static int	ft_atoi(const char *str);
 
 /**
  * @brief Extracts parameters from user provided command line arguments.
@@ -45,4 +47,36 @@ int	get_params(int argc, char **argv, t_params *params)
 			return (printf("Error: times_to_eat must be more than 0\n"), -1);
 	}
 	return (0);
+}
+
+/**
+ * @brief Converts an ascii string to an integer.
+ * 
+ * @param str String to convert.
+ * @retval An integer inbetween INT_MIN and INT_MAX inclusive.
+ * @retval 0 if the string isn't valid.
+ */
+static int	ft_atoi(const char *str)
+{
+	size_t	i;
+	int		sign;
+	int		num;
+
+	if (!str)
+		return (0);
+	i = 0;
+	sign = 1;
+	num = 0;
+	while (str[i] && ((str[i] >= 9 && str[i] <= 13) || str[i] == ' '))
+		i++;
+	if (str[i] && str[i] == '-')
+		sign = -1;
+	if (str[i] && (str[i] == '+' || str[i] == '-'))
+		i++;
+	while (str[i] && (str[i] >= '0' && str[i] <= '9'))
+	{
+		num = num * 10 + (str[i] - 48) * sign;
+		i++;
+	}
+	return (num);
 }

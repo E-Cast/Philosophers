@@ -6,59 +6,15 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 12:07:04 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:13:11 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	terminate_all(t_data *data)
-{
-	int		index;
+static void	recursive_monitor(t_data *data);
 
-	safe_mutex(&data->mic_lock, pthread_mutex_lock);
-	data->mic_state = STOPPED;
-	safe_mutex(&data->mic_lock, pthread_mutex_unlock);
-	index = 0;
-	while (index < data->params.philo_count)
-	{
-		safe_mutex(data->philos[index].info_lock, pthread_mutex_lock);
-		data->philos[index].state = STOPPED;
-		safe_mutex(data->philos[index].info_lock, pthread_mutex_unlock);
-		index++;
-	}
-	index = 0;
-	while (index < data->params.philo_count)
-		pthread_join(data->threads[index++], NULL);
-	pthread_join(data->l_thread, NULL);
-}
-
-static void	recursive_monitor(t_data *data)
-{
-	int		index;
-	t_philo	*philo;
-	long	time;
-
-	index = 0;
-	safe_mutex(&data->mic_lock, pthread_mutex_lock);
-	if (data->mic_state == STOPPED)
-		return ((void) safe_mutex(&data->mic_lock, pthread_mutex_unlock));
-	safe_mutex(&data->mic_lock, pthread_mutex_unlock);
-	while (index < data->params.philo_count)
-	{
-		philo = &data->philos[index++];
-		safe_mutex(philo->info_lock, pthread_mutex_lock);
-		time = gettime_ms();
-		if (time - philo->time_last_eaten >= data->params.time_to_die)
-		{
-			log_msg(philo, 0, M_ID_DIE);
-			return ((void) safe_mutex(philo->info_lock, pthread_mutex_unlock));
-		}
-		safe_mutex(philo->info_lock, pthread_mutex_unlock);
-	}
-	usleep(300);
-	return (recursive_monitor(data));
-}
+static void	terminate_all(t_data *data);
 
 // make sure to check the return of every function and add error messages
 // check for data races
@@ -91,4 +47,52 @@ int	main(int argc, char **argv)
 	recursive_monitor(data);
 	terminate_all(data);
 	return (free_data(&data), 0);
+}
+
+static void	recursive_monitor(t_data *data)
+{
+	int		index;
+	t_philo	*philo;
+	long	time;
+
+	index = 0;
+	safe_mutex(&data->mic_lock, pthread_mutex_lock);
+	if (data->mic_state == STOPPED)
+		return ((void) safe_mutex(&data->mic_lock, pthread_mutex_unlock));
+	safe_mutex(&data->mic_lock, pthread_mutex_unlock);
+	while (index < data->params.philo_count)
+	{
+		philo = &data->philos[index++];
+		safe_mutex(philo->info_lock, pthread_mutex_lock);
+		time = gettime_ms();
+		if (time - philo->time_last_eaten >= data->params.time_to_die)
+		{
+			log_msg(philo, 0, M_ID_DIE);
+			return ((void) safe_mutex(philo->info_lock, pthread_mutex_unlock));
+		}
+		safe_mutex(philo->info_lock, pthread_mutex_unlock);
+	}
+	usleep(300);
+	return (recursive_monitor(data));
+}
+
+static void	terminate_all(t_data *data)
+{
+	int		index;
+
+	safe_mutex(&data->mic_lock, pthread_mutex_lock);
+	data->mic_state = STOPPED;
+	safe_mutex(&data->mic_lock, pthread_mutex_unlock);
+	index = 0;
+	while (index < data->params.philo_count)
+	{
+		safe_mutex(data->philos[index].info_lock, pthread_mutex_lock);
+		data->philos[index].state = STOPPED;
+		safe_mutex(data->philos[index].info_lock, pthread_mutex_unlock);
+		index++;
+	}
+	index = 0;
+	while (index < data->params.philo_count)
+		pthread_join(data->threads[index++], NULL);
+	pthread_join(data->l_thread, NULL);
 }
