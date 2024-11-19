@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 22:35:16 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/19 06:20:27 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/19 06:34:52 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,6 @@ static int	check_if_end(int times_to_eat, int *times_eaten, t_node *node)
 	int	index;
 
 	index = 0;
-	while (MSG_DIE[index] == node->message[index])
-	{
-		index++;
-	}
 	if (my_strcmp(MSG_DIE, node->message) == 0)
 		return (-1);
 	if (times_to_eat == 0)
