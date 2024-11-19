@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:55:55 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/18 21:54:54 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 22:12:53 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,15 @@ static void	manage_thread_failure(int n, t_data *data)
 }
 
 /**
- * @brief Launches half the threads in the array,
- * skipping over every other thread.
+ * @brief Launches all the philosophers with an odd ID and
+ * then all the even ones.
  * 
- * @param index Thread to start with.
  * @param start_time Start time to assign to the philos.
  * @param n Number of philosophers.
  * @param data Struct containing the threads, arguments,
  * and additional program data.
- * @return int 
+ * @retval 0 on a success.
+ * @retval -1 on a failure.
  */
 static int	staggered_launch(long start_time, int n, t_data *data)
 {
@@ -84,14 +84,8 @@ static int	staggered_launch(long start_time, int n, t_data *data)
 		if (pthread_create(&th_arr[index], NULL, start_routine, &philos[index]))
 			return (-1);
 		index += 2;
-	}
-	index = 1;
-	while (index < n)
-	{
-		philos[index].time_last_eaten = start_time;
-		if (pthread_create(&th_arr[index], NULL, start_routine, &philos[index]))
-			return (-1);
-		index += 2;
+		if (index >= n && index % 2 == 0)
+			index = 1;
 	}
 	return (0);
 }
