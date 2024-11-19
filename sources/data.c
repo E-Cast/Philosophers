@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:05 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/15 00:56:22 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:48:23 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static t_philo	init_philo(t_params params, t_data *data, int index)
 	t_philo	philo;
 
 	philo.id = index + 1;
-	philo.parameters = params;
+	philo.params = params;
 	philo.mic_lock = &data->mic_lock;
 	philo.mic_state = &data->mic_state;
 	philo.fork_l = &data->forks[index];

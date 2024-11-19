@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 14:57:29 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/15 00:30:34 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:48:40 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	eat(t_philo *philo)
 	philo->time_last_eaten = log_msg(philo, MSG_EAT);
 	philo->times_eaten++;
 	safe_mutex(philo->info_lock, pthread_mutex_unlock);
-	wait_ms(philo->parameters.time_to_eat);
+	wait_ms(philo->params.time_to_eat);
 	return (0);
 }
 
@@ -71,7 +71,7 @@ static void	recursive_loop(t_philo *philo)
 	if (extract_state(*philo) == STOPPED)
 		return ;
 	log_msg(philo, MSG_SLEEP);
-	wait_ms(philo->parameters.time_to_sleep);
+	wait_ms(philo->params.time_to_sleep);
 	if (extract_state(*philo) == STOPPED)
 		return ;
 	log_msg(philo, MSG_THINK);

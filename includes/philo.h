@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:25:52 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/14 19:31:07 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 19:01:23 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,49 @@
 # include <string.h>
 # include <stdlib.h>
 
-// Premade log messages.
-
+/**
+ * @brief Premade log message for when a philosopher takes a fork.
+ */
 # define MSG_FORK "has taken a fork"
+/**
+ * @brief Premade log message for when a philosopher starts eating.
+ */
 # define MSG_EAT "is eating"
+/**
+ * @brief Premade log message for when a philosopher starts sleeping.
+ */
 # define MSG_SLEEP "is sleeping"
+/**
+ * @brief Premade log message for when a philosopher starts thinking.
+ */
 # define MSG_THINK "is thinking"
 
-// Parameters
-
+/**
+ * @brief Maximum number of philosophers the program supports.
+ */
 # define MAX_PHILO 200
+/**
+ * @brief Minimum time for time_to_die, time_to_eat, and time_to_sleep.
+ */
 # define MIN_TIME 60
-# define PHILO_DELAY 50
+/**
+ * @brief How many microseconds wait_ms sleeps in between gettimeofday calls.
+ * A higher number makes wait_ms less precise but also less ressource intensive.
+ * Testing shows 100 to be the minimum value.
+ */
+# define WAIT_ACCURACY 200
 
+/**
+ * @brief Struct containing the user defined parameters.
+ * 
+ * @param philo_count Number of philosophers to simulate.
+ * @param time_to_die Time allowed to a philosopher to go without
+ * eating before starving.
+ * @param time_to_eat Time a philosopher should take to eat.
+ * @param time_to_sleep Time a philosopher should take to sleep.
+ * @param times_to_eat Number of times every philosopher needs to
+ * eat before the simulation stops.
+ */
 typedef struct s_parameters
 {
 	int	philo_count;
@@ -45,6 +75,14 @@ typedef struct s_parameters
 
 typedef pthread_mutex_t	t_mutex;
 
+/**
+ * @brief Enum of the program or philosophers' states:
+ *
+ * @param RUNNING The program or philosopher is running normally.
+ * @param STOPPED The program or philosopher is stopped or should be stopping.
+ * @param SATED The philosopher is running normally and has eaten at least
+ * as many times as times_to_eat.///////////////////////////////////////////////////////////////////I think sated might be unecessary, which would make the enum itself unecessary
+ */
 typedef enum e_state
 {
 	RUNNING,
@@ -52,10 +90,27 @@ typedef enum e_state
 	SATED
 }	t_state;
 
+/**
+ * @brief Struct containing all the external and shared data a philosopher has.
+ * 
+ * @param id The philosopher's ID.
+ * @param params A copy of the struct containing the user defined parameters.
+ * @param mic_lock The mutex controlling which thread can log messages to the
+ * terminal and access related variables.
+ * @param mic_state The t_state enum controlling whether or not threads are
+ * allowed to log messages.
+ * @param fork_l The mutex representing the fork to the left of the philosopher.
+ * @param fork_r The mutex representing the fork to the right of the philosopher.
+ * @param info_lock The mutex protexting the variables a philospher shares with
+ * the t_data struct.
+ * @param state The t_state enum representing the philosopher's current state.
+ * @param time_last_eaten The last time the philosopher ate.
+ * @param times_eaten The number of time the philosopher ate.
+ */
 typedef struct s_philo
 {
 	int			id;
-	t_params	parameters;
+	t_params	params;
 
 	t_mutex		*mic_lock;
 	t_state		*mic_state;
@@ -68,6 +123,22 @@ typedef struct s_philo
 	int			times_eaten;
 }	t_philo;
 
+/**
+ * @brief Struct containing all the external and shared data a philosopher has.
+ * 
+ * @param params The struct containing the user defined parameters.
+ * @param philos The array containing every t_philo structs.
+ * @param threads The array containing every threads.
+ * @param mic_lock The mutex controlling which thread can log messages to the
+ * terminal and access related variables.
+ * @param mic_state The t_state enum controlling whether or not threads are
+ * allowed to log messages.
+ * @param forks The array containing every fork mutex.
+ * @param info_lock The array of containing every philosopher's info_lock mutex.
+ *
+ * @param m_thread The monitor's thread.
+ * @param times_eaten The number of time the philosopher ate.
+ */
 typedef struct s_data
 {
 	t_params	params;
@@ -105,14 +176,20 @@ int		safe_mutex(t_mutex *mutex, int (mutex_func)(t_mutex *));
 int		ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size);
 
-// Thread management //
-// Launch patterns //
-/*formula //
-even philo_count:
-t_to_die min == t_to_eat + t_to_sleep + (0.25 * philo_count) + 10
-odd philo_count:
-t_to_die min == (t_to_eat * 2) + t_to_sleep + (0.22 * philo_count) + 10
-note: 0.22 is what works on my machine.
+/*	Formula:
+If: time_to_eat <= time_to_sleep
+	Then: Minimum time_to_die == time_to_eat + time_to_sleep + 10;
+Else if: philo count is even
+	Then: Minimum time_to_die == time_to_eat * 2 + 10;
+Else:
+	Then: Minimum time_to_die == time_to_eat * 3 + 10;
+
+Minimum time_to_die == time_to_eat + time_to_sleep + 10;
+Else if time_to_eat <= time_to_sleep
+Minimum time_to_die == time_to_eat * 2 + time_to_sleep + 10;
+Else
+Minimum time_to_die == time_to_eat * 3 + 10;
+
 */
 // Make eating be the last message //
 // Testing //
@@ -132,5 +209,13 @@ Student's philo visualizer
 fsanitize
 ltrace
 things learnt:
+sleep funcs being unreliable
+buffering (buffer and my own)
+
+challenges faced:
+data races
+having the last message be a death or eating
+terminal buffer/scrolling
+unreliable sleep
 */
 #endif

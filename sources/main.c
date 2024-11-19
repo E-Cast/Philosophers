@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 03:27:32 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/15 00:56:08 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 18:37:34 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static void	one_philo(int time_to_sleep)
 // make sure to check the return of every function and add error messages
 // check for data races
 // check for memory leaks
+// try launching monitor after all the threads
 int	main(int argc, char **argv)
 {
 	t_params	params;

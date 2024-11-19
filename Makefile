@@ -15,10 +15,11 @@ OBJ			:=	$(subst $(SRC_DIR), $(OBJ_DIR), $(SRC:.c=.o))
 
 # compilation
 NAME		:=	philo
-# DEBUG 		:=	-g
+# WARNING: DEBUG and SANITIZE both slow down the program a lot. Expect deaths.
+# DEBUG 		:=	-Og
 # SANITIZE	:=	-fsanitize=thread
+# WARNING: Do not enable both SANITIZE and OPTIMIZE. They are NOT compatible.
 # OPTIMIZE	:=	-O3
-# Do not enable both -fsanitize=thread and -O. They are NOT compatible, it WILL cause memory leaks.
 CC			:=	gcc -Wall -Werror -Wextra -pthread $(OPTIMIZE) $(SANITIZE) $(DEBUG) 
 INC_DIR		:= 	includes
 INCLUDES	:=	-I $(INC_DIR)

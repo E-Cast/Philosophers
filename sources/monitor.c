@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 18:32:50 by ecastong          #+#    #+#             */
-/*   Updated: 2024/10/19 12:39:11 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 18:02:46 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ void	*start_monitor(void *arg)
 	{
 		if (params.times_to_eat > 0 && eaten_check(data->philos, params) == -1)
 			break ;
-		(void) index;
 	}
 	index = 0;
 	while (index < params.philo_count)

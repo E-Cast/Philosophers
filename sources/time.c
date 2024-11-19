@@ -6,7 +6,7 @@
 /*   By: ecastong <ecastong@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:28 by ecastong          #+#    #+#             */
-/*   Updated: 2024/11/15 00:30:50 by ecastong         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:37:09 by ecastong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ long	gettime_ms(void)
 
 /**
  * @brief Logs a message to the terminal in the format 
- * 	"timestamp_in_ms ID message"
+ * 	"timestamp_in_ms philo_id message"
  * 
- * @param ID ID to log the message under.
+ * @param philo Philosopher to log the message under.
  * @param msg Message to be logged.
  * @retval The timestamp the message was logged with on success.
  * @retval -1 on error.
@@ -67,6 +67,6 @@ void	wait_ms(int ms)
 	while (current_time < target_time)
 	{
 		current_time = gettime_ms();
-		usleep(500);
+		usleep(WAIT_ACCURACY);
 	}
 }
